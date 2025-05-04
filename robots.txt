@@ -1,0 +1,4 @@
+# robots.txt for counterrevolutionaryconcepts.com.au
+
+User-agent: *
+Disallow:

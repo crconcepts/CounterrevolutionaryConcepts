@@ -1,0 +1,18 @@
+/* TEAM */
+Organization: Counterrevolutionary Concepts
+Website: https://counterrevolutionaryconcepts.com.au
+Motto: Renovatio ex Traditione
+
+/* CREATOR */
+Developer: Stephen Peterson
+Email: info@counterrevolutionaryconcepts.com.au
+Location: New South Wales, Australia
+
+/* TECHNOLOGY */
+Stack: HTML, CSS, GitHub Pages
+Editor: GitHub Desktop + TextEdit + Xcode
+Hosting: GitHub Pages
+
+/* THANKS */
+Inspiration: Ancient Roman and monastic timekeeping
+Font: Gentium Plus by SIL International
