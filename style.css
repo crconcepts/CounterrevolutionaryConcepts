@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Gentium+Plus&display=swap');
+
+:root {
+  --brand-background: #05304C;
+  --brand-gold: #FFD966;
+  --brand-gold-deep: #E6A816;
+}
+
+body {
+  font-family: 'Gentium Plus', serif;
+  background-color: var(--brand-background);
+  color: var(--brand-gold);
+  margin: 0;
+  padding: 2rem;
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  color: var(--brand-gold);
+  border-bottom: 1px solid var(--brand-gold-deep);
+  padding-bottom: 0.2rem;
+}
+
+a {
+  color: var(--brand-gold);
+  text-decoration: underline;
+}
+
+a:hover {
+  color: white;
+}
+
+footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--brand-gold-deep);
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--brand-gold);
+}
