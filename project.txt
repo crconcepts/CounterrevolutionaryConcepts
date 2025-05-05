@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Roman Solar Time – Counterrevolutionary Concepts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+  <header style="text-align: center;">
+    <img src="favicon.png" alt="Solar character" style="max-width: 140px; height: auto; display: block; margin: 1rem auto;">
+    <h1>Roman Solar Time</h1>
+    <p><em>Reclaiming the rhythm of the heavens</em></p>
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="project.html" class="active">Project</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section>
+    <h2>The App</h2>
+    <p>
+      <strong>Roman Solar Time</strong> is an iOS application that revives an ancient but perennial way of marking time—by the sun. It divides the daylight and nighttime into twelve solar hours and four night vigils, dynamically recalculated based on your true local sunrise and sunset.
+    </p>
+    <p>
+      It displays a beautiful solar dial that reflects your position in the current hora, vigil, or segment, using colours and structures inspired by monastic and astronomical tradition.
+    </p>
+  </section>
+
+  <section>
+    <h2>The Problem</h2>
+    <p>
+      In modernity, time has been flattened into mechanical uniformity. Digital clocks, calendar grids, and automated alerts sever our connection to the heavens and the natural rhythms that once ordered human life. Noon is no longer when the sun is highest. Daybreak and dusk are ignored by schedules. Humanity has become unmoored from nature’s order.
+    </p>
+  </section>
+
+  <section>
+    <h2>The Counterrevolution</h2>
+    <p>
+      <strong>Roman Solar Time</strong> is a counterrevolution in timekeeping. It is not about nostalgia—it is about restoration. By returning to a system where hours stretch and compress with the seasons, where sunrise and sunset anchor the cycle, we recover something vital: a sense of proportion, of limitation, of presence.
+    </p>
+    <p>
+      This app invites you not merely to measure time, but to dwell within it.
+    </p>
+  </section>
+
+  <section>
+    <h2>Release</h2>
+    <p>
+      The app will be released in May 2025 for iOS devices. A WatchOS companion and other platforms may follow depending on interest and support.
+    </p>
+  </section>
+
+  <footer>
+    © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+</body>
+</html>

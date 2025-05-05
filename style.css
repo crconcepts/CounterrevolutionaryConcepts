@@ -30,6 +30,29 @@ a:hover {
   color: white;
 }
 
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--brand-gold);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+nav a:hover {
+  color: white;
+  border-bottom: 2px solid var(--brand-gold-deep);
+}
+
 footer {
   margin-top: 4rem;
   border-top: 1px solid var(--brand-gold-deep);
