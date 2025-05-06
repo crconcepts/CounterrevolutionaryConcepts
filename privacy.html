@@ -9,36 +9,40 @@
   <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-  <header>
+  <header style="text-align: center;">
     <h1>Privacy Policy</h1>
     <img src="CrescentMoon.png" alt="Crescent moon illustration" style="max-width: 180px; height: auto; display: block; margin: 1rem auto;">
   </header>
 
+  <div id="mainnav"></div>
+
   <section>
-    <p>
-      At Counterrevolutionary Concepts, we respect your privacy. This website does not collect personal information from users, nor does it set cookies or track visitors.
-    </p>
-
-    <p>
-      Our iOS app, <strong>Roman Solar Time</strong>, uses location data solely on-device to calculate solar time. This information is not transmitted or shared with Counterrevolutionary Concepts or any third party.
-    </p>
-
-    <p>
-      We do not use Google Analytics or other tracking services. Basic download metrics may be made available to us by Apple through the App Store, but we do not retain or associate this data with individuals.
-    </p>
-
-    <p>
-      For any privacy concerns, please contact us at: <a href="mailto:info@counterrevolutionaryconcepts.com.au">info@counterrevolutionaryconcepts.com.au</a>
-    </p>
-
+    <p>At Counterrevolutionary Concepts, we respect your privacy. This website does not collect personal information...</p>
+    <p>Our iOS app, <strong>Roman Solar Time</strong>, uses location data solely on-device to calculate solar time...</p>
+    <p>We do not use Google Analytics or other tracking services...</p>
+    <p>For any privacy concerns, please contact us at: <a href="mailto:info@...">info@counterrevolutionaryconcepts.com.au</a></p>
     <p><a href="index.html">← Back to Home</a></p>
   </section>
 
   <footer>
     © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
-    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
-    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp;
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp;
     <a href="privacy.html">Privacy Policy</a>
   </footer>
+
+  <script>
+    fetch("snippets/mainnav.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("mainnav").innerHTML = html;
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll("#mainnav a").forEach(link => {
+          if (link.getAttribute("href") === current) {
+            link.classList.add("active");
+          }
+        });
+      });
+  </script>
 </body>
 </html>

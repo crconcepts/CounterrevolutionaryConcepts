@@ -1,65 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Counterrevolutionary Concepts</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8">
+  <title>Counterrevolutionary Concepts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
-    <header style="text-align: center;">
-        <img src="CCLogo.png" alt="Counterrevolutionary Concepts logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 1rem;">
-        <img src="Chronos.png" alt="Chronos figure" style="max-width: 200px; height: auto; display: block; margin: 0 auto 1.5rem;">
-        <h1>Counterrevolutionary Concepts</h1>
-        <p><em>Renovatio ex Traditione</em></p>
+  <header style="text-align: center;">
+    <img src="CCLogo.png" alt="Counterrevolutionary Concepts logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 1rem;">
+    <img src="Chronos.png" alt="Chronos figure" style="max-width: 200px; height: auto; display: block; margin: 0 auto 1.5rem;">
+    <h1>Counterrevolutionary Concepts</h1>
+    <p><em>Renovatio ex Traditione</em></p>
+  </header>
 
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="project.html">Project</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-            </ul>
-        </nav>
-    </header>
+  <div id="mainnav"></div>
 
-    <section>
-        <h2>About</h2>
-        <p>
-            Counterrevolutionary Concepts is an independent creative development studio based in Australia, dedicated to cultural renewal through traditional principles. We create digital tools, written content, and educational resources that reconnect individuals with natural rhythm, historical insight, and spiritual structure.
-        </p>
-        <p>
-            This website is owned and operated by Counterrevolutionary Concepts. All operations are managed under 
-            <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> and 
-            <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span>.
-        </p>
-    </section>
+  <section>
+    <h2>About</h2>
+    <p>
+      Counterrevolutionary Concepts is an independent creative development studio based in Australia, dedicated to cultural renewal through traditional principles. We create digital tools, written content, and educational resources that reconnect individuals with natural rhythm, historical insight, and spiritual structure.
+    </p>
+    <p>
+      This website is owned and operated by Counterrevolutionary Concepts. All operations are managed under 
+      <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> and 
+      <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span>.
+    </p>
+  </section>
 
-    <section>
-        <h2>Current Project</h2>
-        <p>
-            Our flagship product, <a href="project.html"><strong>Roman Solar Time</strong></a>, to be released in May 2025, is an iOS application that revives the ancient method of solar-based timekeeping. It divides each day into canonical hours and night vigils, following Roman and monastic tradition. The app uses on-device location data to calculate real-time horae and vigiliae based on the user's solar position.
-        </p>
-        <p>
-            <strong>Roman Solar Time</strong> bridges the divide between the mechanical precision that early clockmakers sought to provide and the traditional, solar-based timekeeping practiced since antiquity. For the first time, the chronolyte can enjoy the best of both worlds: a reliable and accurate method of timekeeping that honours the natural rhythm of day and night.
-        </p>
-    </section>
+  <section>
+    <h2>Current Project</h2>
+    <p>
+      Our flagship product, <a href="project.html"><strong>Roman Solar Time</strong></a>, to be released in May 2025, is an iOS application that revives the ancient method of solar-based timekeeping...
+    </p>
+    <p>
+      <strong>Roman Solar Time</strong> bridges the divide between the mechanical precision that early clockmakers sought to provide and the traditional, solar-based timekeeping practiced since antiquity...
+    </p>
+  </section>
 
-    <section>
-        <h2>Contact</h2>
-        <p>
-            For general inquiries please contact us at:<br>
-            <a href="mailto:info@counterrevolutionaryconcepts.com.au">info@counterrevolutionaryconcepts.com.au</a>
-        </p>
-        <p><a href="privacy.html">Privacy Policy</a></p>
-    </section>
+  <section>
+    <h2>Contact</h2>
+    <p>
+      For general inquiries please contact us at:<br>
+      <a href="mailto:info@counterrevolutionaryconcepts.com.au">info@counterrevolutionaryconcepts.com.au</a>
+    </p>
+    <p><a href="privacy.html">Privacy Policy</a></p>
+  </section>
 
-    <footer>
-        © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
-        <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
-        <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
-        <a href="privacy.html">Privacy Policy</a>
-    </footer>
+  <footer>
+    © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script>
+    fetch("snippets/mainnav.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("mainnav").innerHTML = html;
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll("#mainnav a").forEach(link => {
+          if (link.getAttribute("href") === current) {
+            link.classList.add("active");
+          }
+        });
+      });
+  </script>
 </body>
 </html>

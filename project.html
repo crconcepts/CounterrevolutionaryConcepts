@@ -39,15 +39,13 @@
     <img src="favicon.png" alt="Solar character" style="max-width: 140px; height: auto; display: block; margin: 1rem auto;">
     <h1>Roman Solar Time</h1>
     <p><em>Reclaiming the rhythm of the heavens</em></p>
-
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="project.html" class="active">Project</a></li>
-        <li><a href="privacy.html">Privacy</a></li>
-      </ul>
-    </nav>
   </header>
+
+  <!-- Dynamic main navigation -->
+  <div id="mainnav"></div>
+
+  <!-- Submenu for project-related resources -->
+  <div id="project-submenu"></div>
 
   <section>
     <h2>The App</h2>
@@ -91,8 +89,22 @@
   </footer>
 
   <script>
+    // Load main navigation
+    fetch("snippets/mainnav.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("mainnav").innerHTML = html;
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll("#mainnav a").forEach(link => {
+          if (link.getAttribute("href") === current) {
+            link.classList.add("active");
+          }
+        });
+      });
+
+    // Load project submenu
     fetch("snippets/project-submenu.html")
-      .then(response => response.text())
+      .then(res => res.text())
       .then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
@@ -107,9 +119,8 @@
           }
         });
 
-        const container = document.createElement("div");
+        const container = document.getElementById("project-submenu");
         container.appendChild(submenu);
-        document.body.insertBefore(container, document.querySelector("section"));
       });
   </script>
 </body>

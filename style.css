@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Gentium+Plus&display=swap');
 
+/* ===============================
+   Brand Colours and Typography
+   =============================== */
 :root {
   --brand-background: #05304C;
   --brand-gold: #FFD966;
   --brand-gold-deep: #E6A816;
 }
 
+/* ===============================
+   Base Page Styling
+   =============================== */
 body {
   font-family: 'Gentium Plus', serif;
   background-color: var(--brand-background);
@@ -21,6 +27,9 @@ h1, h2, h3 {
   padding-bottom: 0.2rem;
 }
 
+/* ===============================
+   Links
+   =============================== */
 a {
   color: var(--brand-gold);
   text-decoration: underline;
@@ -30,7 +39,10 @@ a:hover {
   color: white;
 }
 
-nav ul {
+/* ===============================
+   Main Navigation (mainnav)
+   =============================== */
+.mainnav ul {
   list-style: none;
   padding: 0;
   margin: 1.5rem 0;
@@ -41,26 +53,25 @@ nav ul {
   font-size: 1.1rem;
 }
 
-nav a {
+.mainnav a {
   text-decoration: none;
   color: var(--brand-gold);
   border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
-nav a:hover {
+.mainnav a:hover {
   color: white;
   border-bottom: 2px solid var(--brand-gold-deep);
 }
 
-footer {
-  margin-top: 4rem;
-  border-top: 1px solid var(--brand-gold-deep);
-  padding-top: 1rem;
-  font-size: 0.9rem;
-  color: var(--brand-gold);
+.mainnav a.active {
+  font-weight: bold;
 }
 
+/* ===============================
+   Project Submenu (subnav)
+   =============================== */
 .subnav ul {
   list-style: none;
   padding-left: 0;
@@ -84,4 +95,15 @@ footer {
 
 .subnav a.active {
   font-weight: bold;
+}
+
+/* ===============================
+   Footer
+   =============================== */
+footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--brand-gold-deep);
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--brand-gold);
 }
