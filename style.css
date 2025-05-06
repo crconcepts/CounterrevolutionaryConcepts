@@ -21,13 +21,14 @@ body {
   line-height: 1.7;
 }
 
-/* Limit content width and centre on screen */
+/* Constrain main page width for improved readability */
 main {
-  max-width: 900px;                /* Adjust this value as needed */
-  margin: 0 auto;                  /* Horizontally centre the content */
-  padding: 0 1rem;                 /* Side padding for smaller screens */
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
+/* Headings share a consistent style */
 h1, h2, h3 {
   color: var(--brand-gold);
   border-bottom: 1px solid var(--brand-gold-deep);
@@ -102,6 +103,62 @@ a:hover {
 
 .subnav a.active {
   font-weight: bold;
+}
+
+/* ===============================
+   Table Styling
+   =============================== */
+
+/* Apply responsive scroll if table exceeds screen width */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 2rem;
+}
+
+/* Base table appearance */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* General cell styling */
+th, td {
+  vertical-align: top;
+  padding: 1rem;
+  border: 1px solid var(--brand-gold-deep);
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+/* Heading cells */
+th {
+  background-color: var(--brand-gold-deep);
+  color: var(--brand-background);
+  font-weight: bold;
+  text-align: left;
+}
+
+/* Body cells */
+td {
+  color: var(--brand-gold);
+}
+
+/* Emphasis styling */
+em {
+  font-style: italic;
+}
+
+/* Specific table column width constraints */
+th:first-child,
+td:first-child {
+  width: 30%;
+}
+
+th:last-child,
+td:last-child {
+  width: 70%;
 }
 
 /* ===============================
