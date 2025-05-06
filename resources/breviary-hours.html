@@ -8,11 +8,18 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="icon" type="image/png" href="../favicon.png">
   <style>
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 2rem;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 2rem;
+      min-width: 600px;
     }
+
     th, td {
       width: 50%;
       vertical-align: top;
@@ -20,23 +27,20 @@
       border: 1px solid var(--brand-gold-deep);
       box-sizing: border-box;
     }
+
     th {
       background-color: var(--brand-gold-deep);
       color: var(--brand-background);
       font-weight: bold;
       text-align: left;
     }
+
     td {
       color: var(--brand-gold);
     }
+
     em {
       font-style: italic;
-    }
-    @media (max-width: 768px) {
-      th, td {
-        display: block;
-        width: 100%;
-      }
     }
   </style>
 </head>
@@ -52,48 +56,50 @@
       Over time, the Breviary’s canonical hours have been misaligned from their original solar-temporal structure. This table compares the common modern assumptions with the traditional, monastic and theological understanding rooted in the Rule of St. Benedict, the early Fathers, and devotional interpretation of Christ’s Passion.
     </p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Modern Misconception</th>
-          <th>Traditional Understanding</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Matins:</strong> A midnight office, rarely recited outside monasteries.</td>
-          <td><strong>Matins:</strong> Often recited during the <em>First Watch</em> of the night, often soon after sunset by conventual monasteries.  Most observant monasteries might observe it during the <em>Second</em> or even the <em>Third Watch</em>. Sometimes prayed earlier in the afternoon by monastic communities. Traditionally structured in three Nocturns, each nocturn being associated with the first three night watches. <em>Devotionally, it marks Christ’s agony in the garden and arrest.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Lauds:</strong> The morning office, usually prayed at sunrise or upon rising. However, some secular clergy may delay it to the mid-morning.</td>
-          <td><strong>Lauds:</strong> Associated with <em>cockcrow</em>, the turning point between the third and fourth watch. While more observant monastic communities did observe it during the <em>Fourth Watch</em>, the more Conventual would combine it with Matins, which often meant that it, too, was frequently anticipated the previous afternoon. <em>Devotionally linked to Christ’s trial before the Sanhedrin and Peter’s denial.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Prime:</strong> Historically placed at 6:00 AM. However, since Lauds is already understood to be the office of sunrise, it was suppressed in recent times.</td>
-          <td><strong>Prime:</strong> Marks the <em>first hour after sunrise</em>, commencing the monastic workday. <em>Devotionally, recalls Christ’s appearance before Pontius Pilate.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Terce:</strong> A mid-morning prayer, around 9:00 AM.</td>
-          <td><strong>Terce:</strong> The <em>third solar hour after sunrise</em>. Ends near mid-morning. <em>Devotionally, it marks the moment Christ was sentenced and began His journey to Calvary. Traditionally associated with the hour at which the market day commenced.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Sext:</strong> The midday office, typically begun at 12:00 PM.</td>
-          <td><strong>Sext:</strong> The <em>sixth and final ante meridiem hora</em>, concluding just before solar noon. <em>Devotionally associated with the Crucifixion, which began at this hour.</em></td>
-        </tr>
-        <tr>
-          <td><strong>None:</strong> Prayed at 3:00 PM, often called the Hour of Mercy.</td>
-          <td><strong>None:</strong> The <em>third post meridiem hora</em>, ending relatively soon after noon. <em>Marks the hour when Christ died. While the modern “3 PM Hour of Mercy” is popular, the Scriptural time of Christ's death would likely have been earlier, especially since Good Friday was regarded to have occurred near the equinox.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Vespers:</strong> Prayed in the evening, often after dark.</td>
-          <td><strong>Vespers:</strong> Recited in the <em>late afternoon, before sunset</em>, anticipating the end of labour and the arrival of eventide. Separated from Compline by a light repast. <em>Devotionally reflects the taking down of Christ’s body and the quieting of the day.</em></td>
-        </tr>
-        <tr>
-          <td><strong>Compline:</strong> The final night prayer, often said before bed.</td>
-          <td><strong>Compline:</strong> A <em>pre-sunset “stocktake”</em> to conclude communal activity, followed by a light repast and retiring. <em>Devotionally, associated with Christ’s burial and the sealing of the tomb.</em></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Modern Misconception</th>
+            <th>Traditional Understanding</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Matins:</strong> A midnight office, rarely recited outside monasteries.</td>
+            <td><strong>Matins:</strong> Often recited during the <em>First Watch</em> of the night, often soon after sunset by conventual monasteries. Most observant monasteries might observe it during the <em>Second</em> or <em>Third Watch</em>. Sometimes prayed earlier in the afternoon. Traditionally structured in three Nocturns, each linked to one of the first three vigils. <em>Devotionally, it marks Christ’s agony in the garden and arrest.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Lauds:</strong> The morning office, usually prayed at sunrise or upon rising.</td>
+            <td><strong>Lauds:</strong> Associated with <em>cockcrow</em>, the turning point into the Fourth Watch. Often paired with Matins. <em>Devotionally linked to Christ’s trial before the Sanhedrin and Peter’s denial.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Prime:</strong> Historically placed at 6:00 AM. Often seen as redundant alongside Lauds.</td>
+            <td><strong>Prime:</strong> Marks the <em>first hour after sunrise</em>. <em>Devotionally, recalls Christ judged by Pilate.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Terce:</strong> A mid-morning prayer, around 9:00 AM.</td>
+            <td><strong>Terce:</strong> <em>Third solar hour after sunrise</em>, ending near mid-morning. <em>Marks the sentencing and Christ’s journey to Calvary; associated with market opening.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Sext:</strong> The midday office, typically at 12:00 PM.</td>
+            <td><strong>Sext:</strong> <em>Sixth and final ante meridiem hora</em>, concluding before solar noon. <em>Marks Christ’s Crucifixion.</em></td>
+          </tr>
+          <tr>
+            <td><strong>None:</strong> Prayed at 3:00 PM, often called the Hour of Mercy.</td>
+            <td><strong>None:</strong> <em>Third post meridiem hora</em>, soon after noon. <em>Marks the death of Christ. Traditionally occurred earlier than 3 PM.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Vespers:</strong> Prayed in the evening, often after dark.</td>
+            <td><strong>Vespers:</strong> <em>Late afternoon, before sunset</em>. Followed by a light meal. <em>Devotionally reflects the removal of Christ’s body from the Cross.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Compline:</strong> The final night prayer, often before bed.</td>
+            <td><strong>Compline:</strong> A <em>pre-sunset “stocktake”</em> prior to retiring. <em>Marks Christ’s burial and the sealing of the tomb.</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <p style="margin-top: 2rem;">
       These ancient hours were not defined by mechanical clocks but by the heavens themselves. The <strong>Roman Solar Time</strong> app offers a renewed opportunity to align life, work, and prayer to the natural rhythms once honoured by saints and monks alike.
@@ -108,29 +114,28 @@
     <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp;
     <a href="../privacy.html">Privacy Policy</a>
   </footer>
-<script>
-  fetch("snippets/project-submenu.html")
-    .then(response => response.text())
-    .then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const submenu = doc.querySelector("nav.subnav");
 
-      // Highlight active link
-      const currentPath = window.location.pathname.replace(/\/+$/, ""); // Remove trailing slash
-      const links = submenu.querySelectorAll("a");
-      links.forEach(link => {
-        const hrefPath = new URL(link.href).pathname.replace(/\/+$/, "");
-        if (hrefPath === currentPath) {
-          link.classList.add("active");
-        }
+  <script>
+    fetch("../snippets/project-submenu.html")
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const submenu = doc.querySelector("nav.subnav");
+
+        const currentPath = window.location.pathname.replace(/\/+$/, "");
+        const links = submenu.querySelectorAll("a");
+        links.forEach(link => {
+          const hrefPath = new URL(link.href).pathname.replace(/\/+$/, "");
+          if (hrefPath === currentPath) {
+            link.classList.add("active");
+          }
+        });
+
+        const container = document.createElement("div");
+        container.appendChild(submenu);
+        document.body.insertBefore(container, document.querySelector("section"));
       });
-
-      // Insert before the first section
-      const container = document.createElement("div");
-      container.appendChild(submenu);
-      document.body.insertBefore(container, document.querySelector("section"));
-    });
-</script>
+  </script>
 </body>
 </html>
