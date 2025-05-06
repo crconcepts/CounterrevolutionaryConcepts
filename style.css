@@ -21,6 +21,13 @@ body {
   line-height: 1.7;
 }
 
+/* Limit content width and centre on screen */
+main {
+  max-width: 900px;                /* Adjust this value as needed */
+  margin: 0 auto;                  /* Horizontally centre the content */
+  padding: 0 1rem;                 /* Side padding for smaller screens */
+}
+
 h1, h2, h3 {
   color: var(--brand-gold);
   border-bottom: 1px solid var(--brand-gold-deep);
