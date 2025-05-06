@@ -49,14 +49,6 @@
     </nav>
   </header>
 
-  <!-- Submenu for project-related resources -->
-  <nav class="subnav">
-    <ul>
-      <li><a href="resources/breviary-hours.html">Hours of the Breviary</a></li>
-      <!-- Future links can be added here -->
-    </ul>
-  </nav>
-
   <section>
     <h2>The App</h2>
     <p>
@@ -97,29 +89,28 @@
     <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
     <a href="privacy.html">Privacy Policy</a>
   </footer>
-<script>
-  fetch("snippets/project-submenu.html")
-    .then(response => response.text())
-    .then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const submenu = doc.querySelector("nav.subnav");
 
-      // Highlight active link
-      const currentPath = window.location.pathname.replace(/\/+$/, ""); // Remove trailing slash
-      const links = submenu.querySelectorAll("a");
-      links.forEach(link => {
-        const hrefPath = new URL(link.href).pathname.replace(/\/+$/, "");
-        if (hrefPath === currentPath) {
-          link.classList.add("active");
-        }
+  <script>
+    fetch("snippets/project-submenu.html")
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const submenu = doc.querySelector("nav.subnav");
+
+        const currentPath = window.location.pathname.replace(/\/+$/, "");
+        const links = submenu.querySelectorAll("a");
+        links.forEach(link => {
+          const hrefPath = new URL(link.href).pathname.replace(/\/+$/, "");
+          if (hrefPath === currentPath) {
+            link.classList.add("active");
+          }
+        });
+
+        const container = document.createElement("div");
+        container.appendChild(submenu);
+        document.body.insertBefore(container, document.querySelector("section"));
       });
-
-      // Insert before the first section
-      const container = document.createElement("div");
-      container.appendChild(submenu);
-      document.body.insertBefore(container, document.querySelector("section"));
-    });
-</script>
+  </script>
 </body>
 </html>
