@@ -108,6 +108,27 @@ a:hover {
 }
 
 /* ===============================
+   Introductory Essay Block
+   =============================== */
+.intro-essay {
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 750px;
+}
+
+.intro-essay h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.intro-essay .signature {
+  margin-top: 2rem;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* ===============================
    Table Styling
    =============================== */
 
@@ -166,7 +187,6 @@ td:last-child {
 /* ===============================
    FAQ Styling
    =============================== */
-
 dt {
   font-size: 1.2rem;
   font-weight: bold;
