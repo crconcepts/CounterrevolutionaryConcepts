@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is the Counterrevolution?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+  <header style="text-align: center;">
+    <h1>What is the Counterrevolution?</h1>
+    <img src="images/NewBasilica.png" alt="A basilica rising amidst a ruined dystopia" style="max-width: 360px; height: auto; display: block; margin: 1rem auto;">
+  </header>
+<body>
+  <main>
+    <div id="mainnav"></div>
+
+    <section>
+      <p>
+        The Counterrevolution is not merely a political reaction, nor a romantic yearning for the past. It is a cultural phenomenon — a growing movement of men and women committed to restoring the foundations of a sane, ordered, and meaningful civilisation. Rooted in tradition, yet oriented to the future, the Counterrevolution seeks not a return to a bygone age, but the renewal of culture from its deepest sources.
+      </p>
+      <p>
+        At its heart, the Counterrevolution is a reorientation. It is a deliberate turning away from the disordered assumptions of the modern world — its materialism, its atomisation, its contempt for limits — and a turning towards truth, beauty, and harmony. It is not driven by nostalgia. Indeed, nostalgia can be a subtle enemy: it tempts us to cling to mere sentiment rather than to act in service of renewal. The Counterrevolution is not about preserving ruins but laying foundations.
+      </p>
+      <p>
+        This movement does not oppose technological development, artistic innovation, or social vitality. Quite the opposite. It insists that true progress can only come when rooted in the permanent things — when our advances are aligned with the order of nature, the wisdom of tradition, and the dignity of the human person. It is not a revolution against modernity, but a refusal to be defined by it.
+      </p>
+      <p>
+        Projects like <em>Roman Solar Time</em>, with its recovery of natural timekeeping, are examples — small but significant — of how this renewal might take shape. By re-anchoring the experience of time in the rhythms of the created order, this app serves not only as a tool, but as a symbol: a reminder that even in a digitised world, we can still live in harmony with the heavens. It is one facet of a broader mosaic.
+      </p>
+      <p>
+        Elsewhere, the Counterrevolution may take the form of classical education, sacred architecture, liturgical revival, local craftsmanship, principled entrepreneurship, or efforts to restore the family, the sabbath, or the meaning of work. It has no single leader, no party, no capital city. Yet its adherents recognise one another in a shared impulse: the desire to build — or rebuild — a world worth handing down.
+      </p>
+      <p>
+        This is not a short-term project. It is likely to take generations. But every act of reordering, every step towards the good, the true, and the beautiful, contributes to the whole. It is a quiet but determined defiance against cultural entropy — a commitment to life over decay.
+      </p>
+      <p>
+        The Counterrevolution is underway. You may already be part of it.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script>
+    fetch("snippets/mainnav.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("mainnav").innerHTML = html;
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll("#mainnav a").forEach(link => {
+          if (link.getAttribute("href") === current) {
+            link.classList.add("active");
+          }
+        });
+      });
+  </script>
+</body>
+</html>
