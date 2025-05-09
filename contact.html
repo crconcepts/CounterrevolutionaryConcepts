@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact – Roman Solar Time</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+  <header style="text-align: center;">
+    <h1>Contact</h1>
+    <p><em>Have a question or suggestion? We’d love to hear from you.</em></p>
+    <div id="mainnav"></div>
+  </header>
+
+  <main>
+    <section class="contact-form">
+      <form action="https://formspree.io/f/xeogzkrb" method="POST">
+        <!-- Redirect after successful submission -->
+        <input type="hidden" name="_redirect" value="thankyou.html">
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="reason">Reason for Contact:</label>
+        <select id="reason" name="reason" required>
+          <option value="">-- Please select --</option>
+          <option value="general">General Enquiry</option>
+          <option value="feedback">App Feedback</option>
+          <option value="bug">Report a Bug</option>
+          <option value="support">Support Request</option>
+        </select>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
+
+        <!-- Honeypot spam trap -->
+        <input type="text" name="_gotcha" style="display:none">
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script>
+    fetch("snippets/mainnav.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("mainnav").innerHTML = html;
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll("#mainnav a").forEach(link => {
+          if (link.getAttribute("href") === current) {
+            link.classList.add("active");
+          }
+        });
+      });
+  </script>
+</body>
+</html>
