@@ -18,8 +18,9 @@
   <main>
     <section class="contact-form">
       <form action="https://formspree.io/f/xeogzkrb" method="POST">
-        <!-- Redirect after successful submission -->
+        <!-- Must come first to be respected by Formspree -->
         <input type="hidden" name="_redirect" value="https://crconcepts.github.io/CounterrevolutionaryConcepts/thankyou.html">
+        <input type="text" name="_gotcha" style="display:none">
 
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
@@ -38,9 +39,6 @@
 
         <label for="message">Message:</label>
         <textarea id="message" name="message" rows="6" required></textarea>
-
-        <!-- Honeypot spam trap -->
-        <input type="text" name="_gotcha" style="display:none">
 
         <button type="submit">Send Message</button>
       </form>
