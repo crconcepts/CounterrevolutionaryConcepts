@@ -7,6 +7,13 @@
   <meta name="format-detection" content="telephone=no">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <script>
+    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
+    if (isEmbedded) {
+      document.documentElement.classList.add("embedded-mode");
+    }
+  </script>
 </head>
 <body>
   <header style="text-align: center;">
@@ -17,10 +24,12 @@
 
   <main>
     <section>
-      <h2>Website Privacy Policy</h2>
-      <p>At Counterrevolutionary Concepts, we respect your privacy. This website does not collect personal information for tracking or marketing purposes.</p>
-      <p>However, if you choose to contact us via a web form, your name, email address, and message will be submitted securely via a third-party service. Submissions are processed by <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>, and are used solely to respond to your enquiry. This information is not shared, stored long-term, or reused for any other purpose.</p>
-      <p>We do not use Google Analytics or other tracking services. No cookies are used beyond those required for basic site functionality.</p>
+      <div class="suppress-in-app">
+        <h2>Website Privacy Policy</h2>
+        <p>At Counterrevolutionary Concepts, we respect your privacy. This website does not collect personal information for tracking or marketing purposes.</p>
+        <p>However, if you choose to contact us via a web form, your name, email address, and message will be submitted securely via a third-party service. Submissions are processed by <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>, and are used solely to respond to your enquiry. This information is not shared, stored long-term, or reused for any other purpose.</p>
+        <p>We do not use Google Analytics or other tracking services. No cookies are used beyond those required for basic site functionality.</p>
+      </div>
 
       <h2>Roman Solar Time Privacy Policy</h2>
       <p><strong>Roman Solar Time</strong> for iOS uses location data solely on-device to calculate solar time. Your precise location is never required – a 3 km radius approximation is sufficient.</p>
@@ -29,7 +38,7 @@
       <p>If you choose to enable optional features—such as the display of solar minutes—this will involve a one-time in-app purchase. All transactions are handled securely through Apple’s App Store. No payment or purchase information is visible to us at any time.</p>
       <p>For privacy concerns, please <a href="contact.html">contact us here</a>.</p>
 
-      <p><a href="index.html">← Back to Home</a></p>
+      <p class="suppress-in-app"><a href="index.html">← Back to Home</a></p>
     </section>
   </main>
 
