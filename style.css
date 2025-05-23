@@ -260,6 +260,11 @@ footer {
   display: none !important;
 }
 
+.embedded-mode #mainnav,
+.embedded-mode #project-submenu {
+  display: none !important;
+}
+
 /* ===============================
    Responsive Enhancements
    =============================== */
