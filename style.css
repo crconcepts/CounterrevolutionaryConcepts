@@ -78,11 +78,6 @@ a:hover {
   font-weight: bold;
 }
 
-/* Suppress main navigation in embedded mode */
-.embedded-mode #mainnav {
-  display: none !important;
-}
-
 /* ===============================
    Project Submenu (subnav)
    =============================== */
@@ -256,6 +251,13 @@ footer {
   padding-top: 1rem;
   font-size: 0.9rem;
   color: var(--brand-gold);
+}
+
+/* ===============================
+   Embedded Mode Utility Classes
+   =============================== */
+.embedded-mode .suppress-in-app {
+  display: none !important;
 }
 
 /* ===============================

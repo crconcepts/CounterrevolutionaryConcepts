@@ -1,3 +1,12 @@
+<script>
+  if (!document.documentElement.classList.contains("embedded-mode")) {
+    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
+    if (isEmbedded) {
+      document.documentElement.classList.add("embedded-mode");
+    }
+  }
+</script>
+
 <nav class="mainnav">
   <ul>
     <li><a href="index.html">Home</a></li>
