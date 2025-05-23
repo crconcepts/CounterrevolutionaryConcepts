@@ -78,6 +78,11 @@ a:hover {
   font-weight: bold;
 }
 
+/* Suppress main navigation in embedded mode */
+.embedded-mode #mainnav {
+  display: none !important;
+}
+
 /* ===============================
    Project Submenu (subnav)
    =============================== */
