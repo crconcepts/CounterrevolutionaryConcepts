@@ -175,40 +175,45 @@
   </footer>
 
   <script>
-    console.debug("Attempting to load submenu from /snippets/project-submenu.html");
-    fetch("/snippets/project-submenu.html")
-      .then(response => {
-        console.debug("Fetch response:", response);
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.text();
-      })
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const submenu = doc.querySelector("nav.subnav");
+    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
 
-        if (!submenu) {
-          console.warn("Submenu not found in fetched content.");
-          return;
-        }
+    if (!isEmbedded) {
+      console.debug("Attempting to load submenu from ../snippets/project-submenu.html");
 
-        const currentPath = window.location.pathname.replace(/\/+$/, "");
-        const links = submenu.querySelectorAll("a");
-        links.forEach(link => {
-          const hrefPath = new URL(link.href, window.location.origin).pathname.replace(/\/+$/, "");
-          if (hrefPath === currentPath) {
-            link.classList.add("active");
+      fetch("../snippets/project-submenu.html")
+        .then(response => {
+          console.debug("Fetch response:", response);
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.text();
+        })
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const submenu = doc.querySelector("nav.subnav");
+
+          if (!submenu) {
+            console.warn("Submenu not found in fetched content.");
+            return;
           }
-        });
 
-        const container = document.createElement("div");
-        container.appendChild(submenu);
-        document.body.insertBefore(container, document.querySelector("section"));
-        console.debug("Submenu inserted successfully.");
-      })
-      .catch(error => {
-        console.error("Submenu failed to load:", error);
-      });
+          const currentPath = window.location.pathname.replace(/\/+$/, "");
+          const links = submenu.querySelectorAll("a");
+          links.forEach(link => {
+            const hrefPath = new URL(link.href, window.location.origin).pathname.replace(/\/+$/, "");
+            if (hrefPath === currentPath) {
+              link.classList.add("active");
+            }
+          });
+
+          const container = document.createElement("div");
+          container.appendChild(submenu);
+          document.body.insertBefore(container, document.querySelector("section"));
+          console.debug("Submenu inserted successfully.");
+        })
+        .catch(error => {
+          console.error("Submenu failed to load:", error);
+        });
+    }
   </script>
 </body>
 </html>
