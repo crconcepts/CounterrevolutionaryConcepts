@@ -48,18 +48,6 @@
     <a href="privacy.html">Privacy Policy</a>
   </footer>
 
-  <script>
-    fetch("snippets/mainnav.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("mainnav").innerHTML = html;
-        const current = location.pathname.split("/").pop();
-        document.querySelectorAll("#mainnav a").forEach(link => {
-          if (link.getAttribute("href") === current) {
-            link.classList.add("active");
-          }
-        });
-      });
-  </script>
+    <script src="snippets/loadMainnav.js"></script>
 </body>
 </html>
