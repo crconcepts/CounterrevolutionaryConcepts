@@ -1,4 +1,13 @@
 # robots.txt for counterrevolutionaryconcepts.com.au
 
 User-agent: *
-Disallow:
+Disallow: /thankyou.html
+
+# Allow all essential assets
+Allow: /snippets/
+Allow: /style.css
+Allow: /images/
+Allow: /favicon.png
+
+# Sitemap reference
+Sitemap: https://counterrevolutionaryconcepts.com.au/sitemap.xml
