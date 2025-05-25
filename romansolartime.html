@@ -64,40 +64,7 @@
     <a href="privacy.html">Privacy Policy</a>
   </footer>
 
-  <script>
-    // Load main navigation
-    fetch("snippets/mainnav.html")
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById("mainnav").innerHTML = html;
-        const current = location.pathname.split("/").pop();
-        document.querySelectorAll("#mainnav a").forEach(link => {
-          if (link.getAttribute("href") === current) {
-            link.classList.add("active");
-          }
-        });
-      });
-
-    // Load project submenu
-    fetch("snippets/project-submenu.html")
-      .then(res => res.text())
-      .then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const submenu = doc.querySelector("nav.subnav");
-
-        const currentPath = window.location.pathname.replace(/\/+$/, "");
-        const links = submenu.querySelectorAll("a");
-        links.forEach(link => {
-          const hrefPath = new URL(link.href).pathname.replace(/\/+$/, "");
-          if (hrefPath === currentPath) {
-            link.classList.add("active");
-          }
-        });
-
-        const container = document.getElementById("project-submenu");
-        container.appendChild(submenu);
-      });
-  </script>
+  <script src="snippets/loadMainnav.js"></script>
+  <script src="snippets/loadSubmenu.js"></script>
 </body>
 </html>
