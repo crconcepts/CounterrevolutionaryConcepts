@@ -2,6 +2,7 @@
 
 User-agent: *
 Disallow: /thankyou.html
+Disallow: /beta.html
 
 # Allow all essential assets
 Allow: /snippets/
