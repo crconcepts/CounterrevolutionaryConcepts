@@ -1,0 +1,19 @@
+<script>
+  if (!document.documentElement.classList.contains("embedded-mode")) {
+    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
+    if (isEmbedded) document.documentElement.classList.add("embedded-mode");
+  }
+</script>
+
+<nav class="subnav">
+  <ul>
+    <li><a href="/metapolitics/index.html">Overview</a></li>
+    <li><a href="/metapolitics/introduction.html">Introduction</a></li>
+    <li><a href="/metapolitics/proceduralist-globalist-axis.html">Proceduralist–Globalist Axis</a></li>
+    <li><a href="/metapolitics/deconstructionists.html">Deconstructionists</a></li>
+    <li><a href="/metapolitics/vitalists.html">Vitalists</a></li>
+    <li><a href="/metapolitics/restorationists.html">Restorationists</a></li>
+    <li><a href="/metapolitics/indifferentists.html">Indifferentists</a></li>
+    <li><a href="/metapolitics/conclusion.html">Conclusion</a></li>
+  </ul>
+</nav>

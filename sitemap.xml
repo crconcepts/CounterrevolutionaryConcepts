@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Root Pages -->
+  <!-- Root Pages (canonical) -->
   <url>
     <loc>https://counterrevolutionaryconcepts.com.au/</loc>
   </url>
   <url>
-    <loc>https://counterrevolutionaryconcepts.com.au/index.html</loc>
+    <loc>https://counterrevolutionaryconcepts.com.au/romansolartime.html</loc>
   </url>
   <url>
-    <loc>https://counterrevolutionaryconcepts.com.au/romansolartime.html</loc>
+    <loc>https://counterrevolutionaryconcepts.com.au/thecounterrevolution.html</loc>
   </url>
   <url>
     <loc>https://counterrevolutionaryconcepts.com.au/privacy.html</loc>
@@ -20,11 +20,8 @@
   <url>
     <loc>https://counterrevolutionaryconcepts.com.au/credits.html</loc>
   </url>
-  <url>
-    <loc>https://counterrevolutionaryconcepts.com.au/thecounterrevolution.html</loc>
-  </url>
 
-  <!-- Resource Pages -->
+  <!-- Resources -->
   <url>
     <loc>https://counterrevolutionaryconcepts.com.au/resources/faq.html</loc>
   </url>
@@ -36,6 +33,29 @@
   </url>
   <url>
     <loc>https://counterrevolutionaryconcepts.com.au/resources/history.html</loc>
+  </url>
+
+  <!-- Metapolitics -->
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/proceduralist-globalist-axis.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/deconstructionists.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/vitalists.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/restorationists.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/indifferentists.html</loc>
+  </url>
+  <url>
+    <loc>https://counterrevolutionaryconcepts.com.au/metapolitics/conclusion.html</loc>
   </url>
 
 </urlset>
