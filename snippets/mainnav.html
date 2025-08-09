@@ -1,20 +1,58 @@
 <script>
   if (!document.documentElement.classList.contains("embedded-mode")) {
     const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
-    if (isEmbedded) {
-      document.documentElement.classList.add("embedded-mode");
-    }
+    if (isEmbedded) document.documentElement.classList.add("embedded-mode");
   }
 </script>
 
-<nav class="mainnav">
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="romansolartime.html">Roman Solar Time</a></li>
-    <li><a href="thecounterrevolution.html">What is the Counterrevolution?</a></li>
-    <li><a href="metapolitics/index.html">Metapolitics</a></li>
-    <li><a href="privacy.html">Privacy</a></li>
-    <li><a href="credits.html">Credits & Attributions</a></li>
-    <li><a href="contact.html">Contact Us</a></li>
+<nav class="mainnav" aria-label="Primary">
+  <!-- Hamburger (mobile) -->
+  <button class="hamburger" aria-label="Open menu" aria-controls="nav-drawer" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span class="sr-only">Menu</span>
+  </button>
+
+  <!-- Inline menu (desktop) -->
+  <ul class="mainnav-inline">
+    <li><a href="/">Home</a></li>
+    <li><a href="/romansolartime.html">Roman Solar Time</a></li>
+    <li><a href="/metapolitics/index.html">Metapolitics</a></li>
+    <li><a href="/thecounterrevolution.html">What is the Counterrevolution?</a></li>
+    <li><a href="/privacy.html">Privacy</a></li>
+    <li><a href="/credits.html">Credits & Attributions</a></li>
+    <li><a href="/contact.html">Contact Us</a></li>
   </ul>
+
+  <!-- Drawer (populated dynamically from sitemap.xml by /snippets/hamburger-nav.js) -->
+  <div id="nav-drawer" class="nav-drawer" role="dialog" aria-modal="true" aria-label="Site Navigation" hidden>
+    <div class="nav-drawer__panel" role="document">
+      <button class="drawer-close" aria-label="Close menu">✕</button>
+
+      <!-- Top-level links -->
+      <ul class="drawer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/romansolartime.html">Roman Solar Time</a></li>
+        <li><a href="/metapolitics/index.html">Metapolitics</a></li>
+        <li><a href="/thecounterrevolution.html">What is the Counterrevolution?</a></li>
+        <li><a href="/privacy.html">Privacy</a></li>
+        <li><a href="/credits.html">Credits & Attributions</a></li>
+        <li><a href="/contact.html">Contact Us</a></li>
+      </ul>
+
+      <!-- These two sections are placeholders; JS will fill their <ul> from sitemap.xml -->
+      <details class="drawer-section" data-section="resources" open>
+        <summary>Resources</summary>
+        <ul></ul>
+      </details>
+
+      <details class="drawer-section" data-section="metapolitics" open>
+        <summary>Metapolitics</summary>
+        <ul></ul>
+      </details>
+    </div>
+    <div class="nav-drawer__backdrop"></div>
+  </div>
 </nav>
+
+<!-- Dynamic builder: (reads /sitemap.xml and fills the two lists) -->
+<script src="/snippets/hamburger-nav.js"></script>

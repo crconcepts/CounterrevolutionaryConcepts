@@ -265,6 +265,11 @@ footer {
   display: none !important;
 }
 
+/* Hide Metapolitics submenu in embedded mode as well */
+.embedded-mode #metapolitics-submenu {
+  display: none !important;
+}
+
 /* ===============================
    Responsive Enhancements
    =============================== */
@@ -289,3 +294,132 @@ footer {
     font-size: 1.1rem;
   }
 }
+
+/* =========================================================
+   Hamburger / Drawer Navigation (adds mobile nav experience)
+   ========================================================= */
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Hamburger button (visible on mobile) */
+.hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px; height: 40px;
+  background: transparent;
+  border: 1px solid var(--brand-gold-deep);
+  border-radius: 4px;
+  color: var(--brand-gold);
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 22px; height: 2px; background: var(--brand-gold);
+  position: relative; display: inline-block;
+}
+.hamburger span::before,
+.hamburger span::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--brand-gold);
+}
+.hamburger span::before { top: -7px; }
+.hamburger span::after  { top: 7px; }
+
+/* Inline desktop navigation list */
+.mainnav-inline {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  /* Important: hidden by default, shown on wide screens */
+  display: none !important;
+}
+
+/* Drawer container */
+.nav-drawer[hidden] { display: none !important; }
+.nav-drawer {
+  position: fixed; inset: 0; z-index: 1000;
+}
+
+/* Backdrop overlay */
+.nav-drawer__backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.45);
+}
+
+/* Drawer panel */
+.nav-drawer__panel {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: min(86vw, 360px);
+  background: var(--brand-background);
+  border-right: 1px solid var(--brand-gold-deep);
+  box-shadow: 0 0 30px rgba(0,0,0,.5);
+  padding: 1rem 1rem 2rem;
+  overflow-y: auto;
+}
+
+/* Drawer close button */
+.drawer-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 36px;
+  margin-bottom: .5rem;
+  background: transparent;
+  border: 1px solid var(--brand-gold-deep);
+  color: var(--brand-gold);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Drawer link lists */
+.drawer-links,
+.drawer-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin: .5rem 0 1rem;
+}
+
+.drawer-links li,
+.drawer-section li {
+  margin: .4rem 0;
+}
+
+.drawer-links a,
+.drawer-section a {
+  color: var(--brand-gold);
+  text-decoration: none;
+}
+
+.drawer-links a:hover,
+.drawer-section a:hover {
+  text-decoration: underline;
+}
+
+/* Collapsible subsections in drawer */
+.drawer-section summary {
+  cursor: pointer;
+  color: var(--brand-gold);
+  font-weight: bold;
+  margin-top: .5rem;
+  border-top: 1px solid var(--brand-gold-deep);
+  padding-top: .5rem;
+}
+
+/* Prevent background scroll when drawer is open */
+.body-lock { overflow: hidden; }
+
+/* Desktop breakpoint: show inline nav, hide drawer/hamburger */
+@media (min-width: 860px) {
+  .hamburger { display: none; }
+  .mainnav-inline { display: flex !important; }
+  .nav-drawer { display: none !important; }
+}
+
+/* Optional: active state inside drawer if JS adds .active */
+.nav-drawer a.active { font-weight: bold; }
