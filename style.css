@@ -201,29 +201,40 @@ li + li {
 .mainnav-inline li { display: none !important; }
 .mainnav-inline a { display: none !important; }
 
-/* Drawer root (hidden by default; JS toggles) */
+/* ===============================
+   Drawer Navigation
+   =============================== */
 .nav-drawer {
-  position: fixed; inset: 0; z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: none !important; /* don’t dim panel */
+  opacity: 1 !important;
+  filter: none !important;
 }
 
-/* Backdrop */
+/* Backdrop dims only the page */
 .nav-drawer__backdrop {
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   background: rgba(0,0,0,.45);
+  z-index: 0;
 }
 
-/* Drawer panel */
+/* Drawer panel sits above backdrop */
 .nav-drawer__panel {
-  position: absolute; top: 0; bottom: 0; left: 0;
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
   width: min(86vw, 520px); /* slightly wider on desktop */
   background: var(--brand-background);
   border-right: 1px solid var(--brand-gold-deep);
   box-shadow: 0 0 30px rgba(0,0,0,.5);
   padding: 1rem 1rem 2rem;
   overflow-y: auto;
+  z-index: 1;
 }
 
-/* Drawer close button */
+/* Drawer close button (on top of panel content) */
 .drawer-close {
   display: inline-flex;
   align-items: center;
@@ -235,6 +246,8 @@ li + li {
   color: var(--brand-gold);
   cursor: pointer;
   padding: 0.4rem 0.6rem;
+  position: relative;
+  z-index: 2;
 }
 
 .drawer-close:hover,
@@ -429,7 +442,6 @@ kbd {
 /* ===============================
    Embedded mode (in-app)
    =============================== */
-/* Embedded mode (in-app): hide all navigation surfaces */
 :root.embedded-mode #mainnav,
 :root.embedded-mode .mainnav-inline,
 :root.embedded-mode .hamburger,
