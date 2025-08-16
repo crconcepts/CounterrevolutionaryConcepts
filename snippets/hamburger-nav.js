@@ -1,4 +1,3 @@
-<script>
 (() => {
   const root = document;
   const btn = root.querySelector('.hamburger');
@@ -15,118 +14,64 @@
     '[tabindex]:not([tabindex="-1"])','input:not([disabled])','select:not([disabled])','textarea:not([disabled])'
   ].join(',');
 
-  // ---- Drawer open/close & a11y
   function openDrawer() {
-    lastFocus = root.activeElement;
+    lastFocus = document.activeElement;
     drawer.hidden = false;
-    btn.setAttribute('aria-expanded','true');
+    drawer.setAttribute('aria-hidden', 'false');
+    btn.setAttribute('aria-expanded', 'true');
     document.body.classList.add('body-lock');
-    const first = panel.querySelector(focusableSel);
-    (first || closeBtn || panel).focus();
-    root.addEventListener('keydown', onKeydown);
+    const f = panel.querySelector(focusableSel);
+    if (f) f.focus();
+    document.addEventListener('keydown', onKeydown);
   }
+
   function closeDrawer() {
     drawer.hidden = true;
-    btn.setAttribute('aria-expanded','false');
+    drawer.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('body-lock');
-    root.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('keydown', onKeydown);
     if (lastFocus) lastFocus.focus();
   }
-  function onKeydown(e) {
-    if (e.key === 'Escape') { closeDrawer(); return; }
-    if (e.key !== 'Tab') return;
-    const f = panel.querySelectorAll(focusableSel);
-    if (!f.length) return;
-    const first = f[0], last = f[f.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-  }
-  btn.addEventListener('click', openDrawer);
-  closeBtn && closeBtn.addEventListener('click', closeDrawer);
-  backdrop && backdrop.addEventListener('click', closeDrawer);
-  drawer.addEventListener('click', e => { if (e.target.closest('a[href]')) closeDrawer(); });
 
-  // ---- Build submenus from sitemap.xml
+  function onKeydown(e) {
+    if (e.key === 'Escape') closeDrawer();
+  }
+
+  btn.addEventListener('click', () => {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    expanded ? closeDrawer() : openDrawer();
+  });
+  closeBtn.addEventListener('click', closeDrawer);
+  backdrop.addEventListener('click', closeDrawer);
+
+  // Build submenus from sitemap.xml
   async function buildFromSitemap() {
     try {
       const res = await fetch('/sitemap.xml', { cache: 'no-store' });
-      if (!res.ok) throw new Error('sitemap ' + res.status);
-      const xml = await res.text();
-      const dom = new window.DOMParser().parseFromString(xml, 'application/xml');
+      if (!res.ok) throw new Error('Sitemap fetch failed');
+      const text = await res.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'application/xml');
+      const urls = [...xml.querySelectorAll('url loc')].map(n => n.textContent);
 
-      const locs = Array.from(dom.querySelectorAll('url > loc')).map(n => n.textContent.trim());
-      const resources = locs.filter(u => new URL(u).pathname.startsWith('/resources/'));
-      const metapol = locs.filter(u => new URL(u).pathname.startsWith('/metapolitics/'));
-
-      // Helpers: pretty titles from filenames
-      const labelFromPath = (p) => {
-        const name = p.split('/').pop().replace(/\.html$/,'');
-        return decodeURIComponent(
-          name
-            .replace(/-/g,' ')
-            .replace(/\b\w/g, c => c.toUpperCase())
-        );
+      const sections = {
+        project: urls.filter(u => /\/resources\//.test(u)),
+        metapolitics: urls.filter(u => /\/metapolitics\//.test(u)),
       };
 
-      // Targets (create Details if missing)
-      let resDetails = panel.querySelector('details.drawer-section[data-section="resources"]');
-      let metaDetails = panel.querySelector('details.drawer-section[data-section="metapolitics"]');
-      if (!resDetails) {
-        resDetails = document.createElement('details');
-        resDetails.className = 'drawer-section';
-        resDetails.setAttribute('data-section','resources');
-        resDetails.open = true;
-        resDetails.innerHTML = '<summary>Resources</summary><ul></ul>';
-        panel.appendChild(resDetails);
-      }
-      if (!metaDetails) {
-        metaDetails = document.createElement('details');
-        metaDetails.className = 'drawer-section';
-        metaDetails.setAttribute('data-section','metapolitics');
-        metaDetails.open = true;
-        metaDetails.innerHTML = '<summary>Metapolitics</summary><ul></ul>';
-        panel.appendChild(metaDetails);
-      }
-
-      const resUL = resDetails.querySelector('ul'); resUL.innerHTML = '';
-      resources.forEach(u => {
-        const p = new URL(u).pathname;
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = p;
-        a.textContent = labelFromPath(p);
-        li.appendChild(a);
-        resUL.appendChild(li);
-      });
-
-      const metaUL = metaDetails.querySelector('ul'); metaUL.innerHTML = '';
-      // Optional desired order for metapolitics:
-      const desiredOrder = [
-        '/metapolitics/introduction.html',
-        '/metapolitics/proceduralist-globalist-axis.html',
-        '/metapolitics/deconstructionists.html',
-        '/metapolitics/vitalists.html',
-        '/metapolitics/restorationists.html',
-        '/metapolitics/indifferentists.html',
-        '/metapolitics/conclusion.html'
-      ];
-      const sortedMetapol =
-        desiredOrder.filter(p => metapol.some(u => new URL(u).pathname === p))
-        .concat(
-          metapol
-            .map(u => new URL(u).pathname)
-            .filter(p => !desiredOrder.includes(p))
-            .sort()
-        );
-
-      sortedMetapol.forEach(p => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = p;
-        a.textContent = labelFromPath(p);
-        li.appendChild(a);
-        metaUL.appendChild(li);
-      });
+      const fill = (key) => {
+        const ul = panel.querySelector(`.drawer-section[data-section="${key}"] ul`);
+        if (!ul) return;
+        ul.innerHTML = '';
+        sections[key].forEach(u => {
+          const a = document.createElement('a');
+          a.href = u;
+          a.textContent = decodeURIComponent(u.split('/').pop().replace('.html','').replace(/-/g,' '));
+          const li = document.createElement('li'); li.appendChild(a); ul.appendChild(li);
+        });
+      };
+      fill('project'); fill('metapolitics');
 
       // Highlight active link inside drawer
       const current = location.pathname.replace(/\/+$/,'');
@@ -141,4 +86,3 @@
   }
   buildFromSitemap();
 })();
-</script>
