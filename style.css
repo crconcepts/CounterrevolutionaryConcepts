@@ -490,3 +490,35 @@ kbd {
    Responsive
    =============================== */
 /* No responsive switch needed; drawer is universal */
+
+/* ===== Drawer slides IN from the RIGHT ===== */
+
+/* Anchor panel to the right edge */
+.nav-drawer__panel {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);     /* start off-canvas to the right */
+  transition: transform .28s ease-out;
+}
+
+/* When menu is open, slide it into view */
+.nav-drawer[aria-hidden="false"] .nav-drawer__panel {
+  transform: translateX(0);
+}
+
+/* Backdrop fades instead of popping */
+.nav-drawer__backdrop {
+  background: #000;
+  opacity: 0;
+  transition: opacity .28s ease-out;
+}
+.nav-drawer[aria-hidden="false"] .nav-drawer__backdrop {
+  opacity: .45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-drawer__panel,
+  .nav-drawer__backdrop {
+    transition: none !important;
+  }
+}
