@@ -1,11 +1,4 @@
-<script>
-  if (!document.documentElement.classList.contains("embedded-mode")) {
-    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
-    if (isEmbedded) document.documentElement.classList.add("embedded-mode");
-  }
-</script>
-
-<nav class="subnav">
+<nav class="subnav" aria-label="Metapolitics submenu">
   <ul>
     <li><a href="/metapolitics/index.html">Overview</a></li>
     <li><a href="/metapolitics/introduction.html">Introduction</a></li>
