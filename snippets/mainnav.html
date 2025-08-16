@@ -5,12 +5,17 @@
   }
 </script>
 
-<nav class="mainnav" aria-label="Primary">
-  <!-- Hamburger (mobile) -->
-  <button class="hamburger" aria-label="Open menu" aria-controls="nav-drawer" aria-expanded="false">
-    <span aria-hidden="true"></span>
-    <span class="sr-only">Menu</span>
-  </button>
+<button class="hamburger" aria-label="Menu" aria-controls="nav-drawer" aria-expanded="false">
+  <span aria-hidden="true"></span>
+  <span class="hamburger-text">Menu</span>
+</button>
+
+<div id="nav-drawer" class="nav-drawer" hidden aria-hidden="true">
+  <div class="nav-drawer__backdrop"></div>
+  <aside class="nav-drawer__panel" role="dialog" aria-modal="true">
+    <!-- drawer content -->
+  </aside>
+</div>
 
   <!-- Inline menu (desktop) -->
   <ul class="mainnav-inline">

@@ -177,6 +177,28 @@ li + li {
   background: rgba(0,0,0,0.1);
 }
 
+/* Hide the "Menu" text but keep it for screen readers */
+.hamburger-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* fallback in case .sr-only appears anywhere */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
 /* Hamburger icon lines */
 .hamburger span {
   position: relative; display: block; width: 20px; height: 2px; background: var(--brand-gold);
