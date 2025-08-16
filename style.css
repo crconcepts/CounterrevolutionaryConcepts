@@ -157,9 +157,16 @@ li + li {
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
+/* Optional fallback in case .sr-only appears */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
 /* Hamburger button (visible on ALL viewports) */
 .hamburger {
-  display: inline-flex; /* force drawer everywhere */
+  display: inline-flex; /* drawer everywhere */
   align-items: center;
   justify-content: center;
   width: 46px; height: 40px;
@@ -170,6 +177,20 @@ li + li {
   cursor: pointer;
   gap: 0.25rem;
   padding: 0;
+
+  /* pinned top-right */
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+  z-index: 1100; /* above backdrop (1000) */
+  backdrop-filter: saturate(120%) blur(2px); /* subtle legibility on images */
+}
+
+/* Enlarge click target slightly */
+.hamburger::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
 }
 
 .hamburger:hover,
@@ -177,26 +198,15 @@ li + li {
   background: rgba(0,0,0,0.1);
 }
 
-/* Hide the "Menu" text but keep it for screen readers */
+/* Visually hide the text label but keep for screen readers */
 .hamburger-text {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
-}
-
-/* fallback in case .sr-only appears anywhere */
-.sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0);
-  white-space: nowrap; border: 0;
 }
 
 /* Hamburger icon lines */
@@ -213,11 +223,8 @@ li + li {
 /* Inline desktop navigation list — always hidden */
 .mainnav-inline {
   list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 0;
-  justify-content: center;
-  flex-wrap: wrap;
+  padding: 0; margin: 0;
+  gap: 0; justify-content: center; flex-wrap: wrap;
   display: none !important;
 }
 .mainnav-inline li { display: none !important; }
@@ -233,6 +240,13 @@ li + li {
   background: none !important; /* don’t dim panel */
   opacity: 1 !important;
   filter: none !important;
+
+  /* interactions: only backdrop/panel capture clicks */
+  pointer-events: none;
+}
+.nav-drawer__backdrop,
+.nav-drawer__panel {
+  pointer-events: auto;
 }
 
 /* Backdrop dims only the page */
@@ -243,7 +257,7 @@ li + li {
   z-index: 0;
 }
 
-/* Drawer panel sits above backdrop */
+/* Drawer panel sits above backdrop (left side by default) */
 .nav-drawer__panel {
   position: absolute;
   top: 0; bottom: 0; left: 0;
@@ -288,6 +302,7 @@ li + li {
 .nav-drawer__list a {
   display: inline-block;
   text-decoration: none;
+  color: inherit;
 }
 
 .nav-drawer__list a:hover,
@@ -299,7 +314,7 @@ li + li {
 .drawer-section {
   margin-top: 1.25rem;
 }
-.drawer-section h3 {
+.drawer-section h3, .drawer-section summary {
   margin: 0 0 .5rem;
   font-size: 1.05rem;
 }
