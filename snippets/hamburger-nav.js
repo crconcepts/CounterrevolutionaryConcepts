@@ -4,51 +4,34 @@
   const drawer = root.getElementById('nav-drawer');
   if (!btn || !drawer) return;
 
-  const panel = drawer.querySelector('.nav-drawer__panel');
-  const closeBtn = drawer.querySelector('.drawer-close');
-  const backdrop = drawer.querySelector('.nav-drawer__backdrop');
-
+  const panel   = drawer.querySelector('.nav-drawer__panel');
+  const closeBtn= drawer.querySelector('.drawer-close');
+  const backdrop= drawer.querySelector('.nav-drawer__backdrop');
   let lastFocus = null;
+
   const focusableSel = [
-    'a[href]',
-    'button:not([disabled])',
-    'summary',
-    '[tabindex]:not([tabindex="-1"])',
-    'input:not([disabled])',
-    'select:not([disabled])',
-    'textarea:not([disabled])'
+    'a[href]','button:not([disabled])','summary',
+    '[tabindex]:not([tabindex="-1"])','input:not([disabled])','select:not([disabled])','textarea:not([disabled])'
   ].join(',');
 
   function trapFocus(e) {
     if (drawer.getAttribute('aria-hidden') === 'true') return;
     if (e.key !== 'Tab') return;
-
     const nodes = panel.querySelectorAll(focusableSel);
     if (!nodes.length) return;
-
     const first = nodes[0];
     const last  = nodes[nodes.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
 
   function onKeydown(e) {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeDrawer();
-    } else {
-      trapFocus(e);
-    }
+    if (e.key === 'Escape') { e.preventDefault(); closeDrawer(); }
+    else { trapFocus(e); }
   }
 
   function afterClose() {
-    drawer.hidden = true;                              // remove from a11y tree
+    drawer.hidden = true;                              // remove from flow/a11y after animation
     document.body.classList.remove('body-lock');
     btn.setAttribute('aria-expanded', 'false');
     drawer.setAttribute('aria-hidden', 'true');
@@ -57,59 +40,42 @@
   }
 
   function closeDrawer() {
-    // Start slide-out / fade-out
+    // Start slide-out / fade-out (keep element visible so it can animate)
     drawer.setAttribute('aria-hidden', 'true');
 
-    // Wait for panel transition to finish, then hide the whole drawer
-    const handle = (e) => {
+    const onEnd = (e) => {
       if (e.target !== panel) return;
-      panel.removeEventListener('transitionend', handle);
+      panel.removeEventListener('transitionend', onEnd);
       afterClose();
     };
-    panel.addEventListener('transitionend', handle);
+    panel.addEventListener('transitionend', onEnd);
 
-    // Failsafe (in case user agent fires no transitionend)
-    setTimeout(() => {
-      if (drawer.hidden) return;
-      afterClose();
-    }, 400);
+    // Failsafe in case transitionend doesn't fire
+    setTimeout(() => { if (!drawer.hidden) afterClose(); }, 400);
   }
 
   function openDrawer() {
     lastFocus = document.activeElement;
     drawer.hidden = false;                             // allow CSS to animate
-    // next frame → set aria so CSS transitions can start cleanly
+    // Next frame so the browser registers initial transform/opacity
     requestAnimationFrame(() => {
-      drawer.setAttribute('aria-hidden', 'false');
+      drawer.setAttribute('aria-hidden', 'false');     // triggers transitions
     });
     btn.setAttribute('aria-expanded', 'true');
     document.body.classList.add('body-lock');
-
-    // Focus first focusable
-    const firstFocusable = panel.querySelector(focusableSel);
-    if (firstFocusable) firstFocusable.focus();
-
     document.addEventListener('keydown', onKeydown);
+
+    const first = panel.querySelector(focusableSel);
+    if (first) first.focus();
   }
 
-  // Toggle via button
+  // Button toggle
   btn.addEventListener('click', () => {
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     expanded ? closeDrawer() : openDrawer();
   });
 
-  // Close actions
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  // Backdrop & Close button
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
-
-  // Close when a link in the drawer is activated (keeps navigation snappy)
-  panel.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    // Let the navigation proceed; no need to wait transition
-    document.removeEventListener('keydown', onKeydown);
-  });
-
-  // Optional: build sections from sitemap (leave as-is if you already do this)
-  // (You can keep your existing sitemap code here.)
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
 })();
