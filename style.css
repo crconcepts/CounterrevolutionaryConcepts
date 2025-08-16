@@ -157,9 +157,9 @@ li + li {
   clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
-/* Hamburger button (visible on mobile) */
+/* Hamburger button (visible on ALL viewports) */
 .hamburger {
-  display: none; /* desktop-first: hidden by default */
+  display: inline-flex; /* force drawer everywhere */
   align-items: center;
   justify-content: center;
   width: 46px; height: 40px;
@@ -188,38 +188,18 @@ li + li {
 .hamburger span::before { top: -7px; }
 .hamburger span::after  { top: 7px; }
 
-/* Inline desktop navigation list */
+/* Inline desktop navigation list — always hidden */
 .mainnav-inline {
   list-style: none;
   padding: 0;
-  margin: 1.5rem 0;
-  gap: 2rem;
+  margin: 0;
+  gap: 0;
   justify-content: center;
   flex-wrap: wrap;
-  /* Desktop-first: visible by default */
-  display: flex;
+  display: none !important;
 }
-
-.mainnav-inline,
-.mainnav-inline li {
-  display: flex;
-}
-
-.mainnav-inline a {
-  text-decoration: none;
-  font-weight: normal;
-  padding: 0.25rem 0.15rem;
-}
-
-.mainnav-inline a:hover,
-.mainnav-inline a:focus {
-  text-decoration: underline;
-}
-
-.mainnav-inline a.active {
-  border-bottom: 2px solid var(--brand-gold-deep);
-  padding-bottom: 0.2rem;
-}
+.mainnav-inline li { display: none !important; }
+.mainnav-inline a { display: none !important; }
 
 /* Drawer root (hidden by default; JS toggles) */
 .nav-drawer {
@@ -235,7 +215,7 @@ li + li {
 /* Drawer panel */
 .nav-drawer__panel {
   position: absolute; top: 0; bottom: 0; left: 0;
-  width: min(86vw, 360px);
+  width: min(86vw, 520px); /* slightly wider on desktop */
   background: var(--brand-background);
   border-right: 1px solid var(--brand-gold-deep);
   box-shadow: 0 0 30px rgba(0,0,0,.5);
@@ -460,9 +440,4 @@ kbd {
 /* ===============================
    Responsive
    =============================== */
-/* Mobile: use hamburger & drawer, hide inline list */
-@media (max-width: 859px) {
-  .mainnav-inline { display: none !important; }
-  .hamburger { display: inline-flex; }
-  .nav-drawer { display: none; } /* JS toggles visibility when opened */
-}
+/* No responsive switch needed; drawer is universal */
