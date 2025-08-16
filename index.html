@@ -5,6 +5,13 @@
   <title>Counterrevolutionary Concepts</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="format-detection" content="telephone=no">
+  <script>
+    try {
+      if (new URLSearchParams(location.search).get('embedded') === 'true') {
+        document.documentElement.classList.add('embedded-mode');
+      }
+    } catch (_) {}
+  </script>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
