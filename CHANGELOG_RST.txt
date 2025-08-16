@@ -1,0 +1,5 @@
+Restructure to /rst applied on 2025-08-16 09:36:51
+- Kept filenames for resources (faq.html, reclaimingtheday.html, history.html, breviary-hours.html)
+- Moved romansolartime.html -> rst/index.html (landing)
+- Created static redirect stubs at old paths (GitHub Pages friendly)
+- Updated sitemap.xml paths accordingly
