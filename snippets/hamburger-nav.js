@@ -1,89 +1,109 @@
-/* Accessible drawer controller: slides from right, dims background only */
-(() => {
-  const openBtn = document.querySelector('.hamburger');
-  const drawer = document.getElementById('nav-drawer');
-  if (!openBtn || !drawer) return;
+/* Accessible hamburger-driven drawer controller
+   - Ensures drawer starts closed and inert
+   - Smooth slide from right; background dims
+   - Focus trap, ESC to close, backdrop/close button to close
+   - No content changes
+*/
+(function () {
+  const q = (sel, root = document) => root.querySelector(sel);
+  const qa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const drawer = q('#nav-drawer');
+  if (!drawer) return;
 
-  const panel = drawer.querySelector('.nav-drawer__panel');
-  const backdrop = drawer.querySelector('.nav-drawer__backdrop');
-  const closeBtn = drawer.querySelector('.drawer-close');
-  const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300;
+  // Start closed + inert
+  drawer.hidden = true;
+  drawer.setAttribute('aria-hidden', 'true');
 
-  let lastFocused = null;
-  let closingTimer = null;
+  const panel = q('.nav-drawer__panel', drawer);
+  const backdrop = q('.nav-drawer__backdrop', drawer);
+  const closeBtn = q('.drawer-close', drawer);
+  const openers = qa('[aria-controls="nav-drawer"]');
 
-  const focusablesSelector = [
-    'a[href]','area[href]','button:not([disabled])','input:not([disabled])',
-    'select:not([disabled])','textarea:not([disabled])','summary','[tabindex]:not([tabindex="-1"])'
-  ].join(',');
+  let lastFocus = null;
+  let trapHandler = null;
 
-  function trapFocus(e){
-    if (!drawer.classList.contains('is-open')) return;
-    const focusables = panel.querySelectorAll(focusablesSelector);
+  function trapFocus(e) {
+    if (e.key !== 'Tab') return;
+    const focusables = qa([
+      'a[href]:not([tabindex="-1"])',
+      'button:not([disabled]):not([tabindex="-1"])',
+      'input:not([disabled]):not([tabindex="-1"])',
+      'select:not([disabled]):not([tabindex="-1"])',
+      'textarea:not([disabled]):not([tabindex="-1"])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(','), panel);
     if (!focusables.length) return;
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
-    if (e.key === 'Tab') {
-      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
-      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
-    } else if (e.key === 'Escape') {
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
       closeDrawer();
     }
   }
 
-  function onTransitionEnd(e){
-    if (e.target !== panel) return;
-    if (!drawer.classList.contains('is-open')) {
-      drawer.hidden = true;
-      drawer.setAttribute('aria-hidden','true');
-      drawer.removeEventListener('transitionend', onTransitionEnd);
-    }
-  }
-
-  function openDrawer(){
-    if (closingTimer) { clearTimeout(closingTimer); closingTimer = null; }
-    lastFocused = document.activeElement;
-    drawer.hidden = false;
-    drawer.setAttribute('aria-hidden','false');
-    document.body.classList.add('no-scroll');
-    // next frame to ensure transitions apply
+  function openDrawer(opener) {
+    if (!drawer || !panel) return;
+    lastFocus = opener || document.activeElement;
+    drawer.hidden = false; // participate in layout
     requestAnimationFrame(() => {
-      drawer.classList.add('is-open');
-      openBtn.setAttribute('aria-expanded','true');
-      // move focus to panel
-      const focusable = panel.querySelector(focusablesSelector);
-      (focusable || closeBtn || panel).focus({preventScroll:true});
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('body-lock');
+      (closeBtn || panel).focus({ preventScroll: true });
+      trapHandler = (ev) => trapFocus(ev);
+      document.addEventListener('keydown', trapHandler);
+      document.addEventListener('keydown', onKeydown);
     });
-    document.addEventListener('keydown', trapFocus);
   }
 
-  function closeDrawer(){
-    drawer.classList.remove('is-open');
-    openBtn.setAttribute('aria-expanded','false');
-    document.body.classList.remove('no-scroll');
-    document.removeEventListener('keydown', trapFocus);
-    // use transition end or timeout as fallback
-    if (duration === 0) {
+  function closeDrawer() {
+    if (!drawer) return;
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('body-lock');
+    const onEnd = (ev) => {
+      if (ev.target !== panel) return;
       drawer.hidden = true;
-      drawer.setAttribute('aria-hidden','true');
-    } else {
-      drawer.addEventListener('transitionend', onTransitionEnd);
-      closingTimer = setTimeout(() => {
-        drawer.hidden = true;
-        drawer.setAttribute('aria-hidden','true');
-        drawer.removeEventListener('transitionend', onTransitionEnd);
-      }, duration + 80);
+      panel.removeEventListener('transitionend', onEnd);
+      if (trapHandler) {
+        document.removeEventListener('keydown', trapHandler);
+        trapHandler = null;
+      }
+      document.removeEventListener('keydown', onKeydown);
+      if (lastFocus && typeof lastFocus.focus === 'function') {
+        lastFocus.focus({ preventScroll: true });
+      }
+    };
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      drawer.hidden = true;
+      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      return;
     }
-    if (lastFocused) { try { lastFocused.focus({preventScroll:true}); } catch(e){} }
+    if (panel) panel.addEventListener('transitionend', onEnd, { once: true });
+    else drawer.hidden = true;
   }
 
-  openBtn.addEventListener('click', (e) => { e.preventDefault(); openDrawer(); });
+  openers.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      if (expanded) {
+        closeDrawer();
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        openDrawer(btn);
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-
-  // Close if user clicks links inside the panel (optional)
-  panel.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href]');
-    if (a && a.getAttribute('href') && !a.getAttribute('target')) closeDrawer();
-  });
+  window.addEventListener('hashchange', closeDrawer);
 })();
