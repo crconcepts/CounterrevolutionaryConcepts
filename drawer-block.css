@@ -70,3 +70,16 @@
   .nav-drawer .submenu ul { padding-left: var(--submenu-indent) !important; }
   .nav-drawer .drawer-section > summary { padding-left: 1.4rem !important; }
 }
+
+/* === Fix: ensure submenu indentation on desktop too === */
+.nav-drawer .submenu > ul {
+  /* Use logical property so it works in all directions */
+  padding-inline-start: var(--submenu-indent) !important;
+  /* Keep spacing consistent */
+  margin: 0;
+}
+
+/* Mirror the summary left-inset used on mobile so arrow/text align consistently */
+.nav-drawer .drawer-section > summary {
+  padding-left: 1.4rem; /* matches mobile rule */
+}
