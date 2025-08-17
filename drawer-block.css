@@ -12,73 +12,61 @@
 
 /* ===== Nav drawer spacing + submenu indent ===== */
 :root {
-  /* tweak if you want tighter/looser spacing */
   --nav-item-gap: 0.6rem;
   --submenu-indent: 2rem;
 }
-
-/* Main list spacing (if using list items) */
-.nav-drawer .drawer__links {
-  list-style: disc;
-  margin: 0;
-  padding: 0 0 0 1.1rem; /* keep existing bullets */
-}
+.nav-drawer .drawer__links { list-style: disc; margin: 0; padding: 0 0 0 1.1rem; }
 .nav-drawer .drawer__links > li + li { margin-top: var(--nav-item-gap); }
-
-/* Align submenu disclosure rows (summary) with main items */
-.nav-drawer .drawer-section {
-  margin: 0;                /* remove default gaps around <details> */
-  padding: 0;
-}
+.nav-drawer .drawer-section { margin: 0; padding: 0; }
 .nav-drawer .drawer-section > summary {
   display: block;
-  margin: var(--nav-item-gap) 0; /* same vertical gap as main items */
-  list-style: none;              /* avoid extra marker styling */
+  margin: var(--nav-item-gap) 0;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Submenu block spacing: same as between main items */
-.nav-drawer .drawer-section[open] .submenu {
-  margin: var(--nav-item-gap) 0;
-}
+/* Submenu block spacing equals main item gap */
+.nav-drawer .drawer-section[open] .submenu { margin: var(--nav-item-gap) 0; }
+  color: #C5A200; /* brand gold for arrow + text */
 
 /* Indent only submenu items (not the summary row) */
-.nav-drawer .submenu ul {
-  margin: 0;
-  padding-left: var(--submenu-indent); /* visual indent for submenu items */
-}
-
-/* Optional: tidy submenu item spacing */
+.nav-drawer .submenu ul { margin: 0; padding-left: var(--submenu-indent); }
 .nav-drawer .submenu li + li { margin-top: calc(var(--nav-item-gap) * 0.75); }
+.nav-drawer .submenu a { display: block; text-decoration: none; }
 
-/* Keep clickable area neat */
-.nav-drawer .submenu a {
-  display: block;
-  text-decoration: none;
-}
-
-
-
-/* === Consistent submenu disclosure arrows (desktop + mobile) === */
+/* === Consistent custom disclosure arrows (desktop + mobile) === */
 /* Hide UA markers to avoid cross-browser inconsistencies */
-.nav-drawer .drawer-section > summary::-webkit-details-marker { display: none; }
+.nav-drawer .drawer-section > summary::-webkit-details-marker { display: none !important; }
 .nav-drawer .drawer-section > summary::marker { content: ""; }
 
-/* Provide our own marker */
+/* Use an inline SVG so iOS Safari reliably shows the icon; rotate on open */
 .nav-drawer .drawer-section > summary {
   position: relative;
-  padding-left: 1.2rem; /* space for arrow glyph */
+  padding-left: 1.4rem; /* space for arrow */
 }
-
 .nav-drawer .drawer-section > summary::before {
-  content: "▸";
+  content: "";
   position: absolute;
   left: 0;
-  top: 0.1em;
-  font-size: 1.05em;
-  line-height: 1;
+  top: 0.15em;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+  background-position: center;
+  /* Right-pointing triangle; fill inherits currentColor */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='currentColor' d='M9 5l7 7-7 7'/></svg>");
+  transform: rotate(0deg);
+  transition: transform .2s ease;
+}
+.nav-drawer .drawer-section[open] > summary::before {
+  color: #C5A200; /* brand gold for arrow + text */
+  transform: rotate(90deg);
 }
 
-/* Open state arrow */
-.nav-drawer .drawer-section[open] > summary::before {
-  content: "▾";
+/* Mobile safeguard: some engines drop list padding; force indent */
+@media (max-width: 768px) {
+  .nav-drawer .submenu ul { padding-left: var(--submenu-indent) !important; }
+  .nav-drawer .drawer-section > summary { padding-left: 1.4rem !important; }
 }
