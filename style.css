@@ -517,3 +517,49 @@ kbd {
 .nav-drawer[aria-hidden="false"] .nav-drawer__backdrop {
   opacity: .45;
 }
+
+/* === Drawer animation & layering (slide from right) === */
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none; /* enable only when open */
+}
+.nav-drawer[hidden] { display: none; }
+.nav-drawer.is-open { pointer-events: auto; }
+
+.nav-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55); /* dim background only */
+  opacity: 0;
+  transition: opacity 300ms ease;
+  will-change: opacity;
+  z-index: 0; /* below panel */
+}
+.nav-drawer.is-open .nav-drawer__backdrop { opacity: 1; }
+
+.nav-drawer__panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(360px, 90vw);
+  max-width: 90vw;
+  background: var(--brand-background, #001925);
+  box-shadow: -18px 0 36px rgba(0,0,0,0.35);
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+  z-index: 1; /* above backdrop */
+  overflow-y: auto;
+}
+.nav-drawer.is-open .nav-drawer__panel { transform: translateX(0); }
+
+/* Prevent body scroll when drawer open */
+.no-scroll { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-drawer__backdrop,
+  .nav-drawer__panel { transition: none; }
+}

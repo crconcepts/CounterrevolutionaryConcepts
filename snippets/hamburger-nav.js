@@ -1,81 +1,89 @@
+/* Accessible drawer controller: slides from right, dims background only */
 (() => {
-  const root = document;
-  const btn = root.querySelector('.hamburger');
-  const drawer = root.getElementById('nav-drawer');
-  if (!btn || !drawer) return;
+  const openBtn = document.querySelector('.hamburger');
+  const drawer = document.getElementById('nav-drawer');
+  if (!openBtn || !drawer) return;
 
-  const panel   = drawer.querySelector('.nav-drawer__panel');
-  const closeBtn= drawer.querySelector('.drawer-close');
-  const backdrop= drawer.querySelector('.nav-drawer__backdrop');
-  let lastFocus = null;
+  const panel = drawer.querySelector('.nav-drawer__panel');
+  const backdrop = drawer.querySelector('.nav-drawer__backdrop');
+  const closeBtn = drawer.querySelector('.drawer-close');
+  const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300;
 
-  const focusableSel = [
-    'a[href]','button:not([disabled])','summary',
-    '[tabindex]:not([tabindex="-1"])','input:not([disabled])','select:not([disabled])','textarea:not([disabled])'
+  let lastFocused = null;
+  let closingTimer = null;
+
+  const focusablesSelector = [
+    'a[href]','area[href]','button:not([disabled])','input:not([disabled])',
+    'select:not([disabled])','textarea:not([disabled])','summary','[tabindex]:not([tabindex="-1"])'
   ].join(',');
 
-  function trapFocus(e) {
-    if (drawer.getAttribute('aria-hidden') === 'true') return;
-    if (e.key !== 'Tab') return;
-    const nodes = panel.querySelectorAll(focusableSel);
-    if (!nodes.length) return;
-    const first = nodes[0];
-    const last  = nodes[nodes.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  function trapFocus(e){
+    if (!drawer.classList.contains('is-open')) return;
+    const focusables = panel.querySelectorAll(focusablesSelector);
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.key === 'Tab') {
+      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+    } else if (e.key === 'Escape') {
+      closeDrawer();
+    }
   }
 
-  function onKeydown(e) {
-    if (e.key === 'Escape') { e.preventDefault(); closeDrawer(); }
-    else { trapFocus(e); }
+  function onTransitionEnd(e){
+    if (e.target !== panel) return;
+    if (!drawer.classList.contains('is-open')) {
+      drawer.hidden = true;
+      drawer.setAttribute('aria-hidden','true');
+      drawer.removeEventListener('transitionend', onTransitionEnd);
+    }
   }
 
-  function afterClose() {
-    drawer.hidden = true;                              // remove from flow/a11y after animation
-    document.body.classList.remove('body-lock');
-    btn.setAttribute('aria-expanded', 'false');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.removeEventListener('keydown', onKeydown);
-    if (lastFocus) lastFocus.focus();
-  }
-
-  function closeDrawer() {
-    // Start slide-out / fade-out (keep element visible so it can animate)
-    drawer.setAttribute('aria-hidden', 'true');
-
-    const onEnd = (e) => {
-      if (e.target !== panel) return;
-      panel.removeEventListener('transitionend', onEnd);
-      afterClose();
-    };
-    panel.addEventListener('transitionend', onEnd);
-
-    // Failsafe in case transitionend doesn't fire
-    setTimeout(() => { if (!drawer.hidden) afterClose(); }, 400);
-  }
-
-  function openDrawer() {
-    lastFocus = document.activeElement;
-    drawer.hidden = false;                             // allow CSS to animate
-    // Next frame so the browser registers initial transform/opacity
+  function openDrawer(){
+    if (closingTimer) { clearTimeout(closingTimer); closingTimer = null; }
+    lastFocused = document.activeElement;
+    drawer.hidden = false;
+    drawer.setAttribute('aria-hidden','false');
+    document.body.classList.add('no-scroll');
+    // next frame to ensure transitions apply
     requestAnimationFrame(() => {
-      drawer.setAttribute('aria-hidden', 'false');     // triggers transitions
+      drawer.classList.add('is-open');
+      openBtn.setAttribute('aria-expanded','true');
+      // move focus to panel
+      const focusable = panel.querySelector(focusablesSelector);
+      (focusable || closeBtn || panel).focus({preventScroll:true});
     });
-    btn.setAttribute('aria-expanded', 'true');
-    document.body.classList.add('body-lock');
-    document.addEventListener('keydown', onKeydown);
-
-    const first = panel.querySelector(focusableSel);
-    if (first) first.focus();
+    document.addEventListener('keydown', trapFocus);
   }
 
-  // Button toggle
-  btn.addEventListener('click', () => {
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    expanded ? closeDrawer() : openDrawer();
-  });
+  function closeDrawer(){
+    drawer.classList.remove('is-open');
+    openBtn.setAttribute('aria-expanded','false');
+    document.body.classList.remove('no-scroll');
+    document.removeEventListener('keydown', trapFocus);
+    // use transition end or timeout as fallback
+    if (duration === 0) {
+      drawer.hidden = true;
+      drawer.setAttribute('aria-hidden','true');
+    } else {
+      drawer.addEventListener('transitionend', onTransitionEnd);
+      closingTimer = setTimeout(() => {
+        drawer.hidden = true;
+        drawer.setAttribute('aria-hidden','true');
+        drawer.removeEventListener('transitionend', onTransitionEnd);
+      }, duration + 80);
+    }
+    if (lastFocused) { try { lastFocused.focus({preventScroll:true}); } catch(e){} }
+  }
 
-  // Backdrop & Close button
+  openBtn.addEventListener('click', (e) => { e.preventDefault(); openDrawer(); });
   if (backdrop) backdrop.addEventListener('click', closeDrawer);
   if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+
+  // Close if user clicks links inside the panel (optional)
+  panel.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (a && a.getAttribute('href') && !a.getAttribute('target')) closeDrawer();
+  });
 })();
