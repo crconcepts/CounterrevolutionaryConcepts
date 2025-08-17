@@ -4,6 +4,9 @@ User-agent: *
 Disallow: /thankyou.html
 Disallow: /beta.html
 
+Disallow: /resources/
+Disallow: /romansolartime.html
+
 # Allow all essential assets
 Allow: /snippets/
 Allow: /style.css

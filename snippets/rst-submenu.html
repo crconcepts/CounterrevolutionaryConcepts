@@ -1,18 +1,9 @@
-<script>
-  if (!document.documentElement.classList.contains("embedded-mode")) {
-    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
-    if (isEmbedded) {
-      document.documentElement.classList.add("embedded-mode");
-    }
-  }
-</script>
-
-<nav class="subnav" aria-label="Roman Solar Time submenu">
+<nav class="submenu" aria-label="Roman Solar Time">
   <ul>
-    <li><a href="/rst/faq.html">Frequently Asked Questions</a></li>
-    <li><a href="/rst/breviary-hours.html">Hours of the Breviary</a></li>
-    <li><a href="/rst/history.html">A Brief History of Timekeeping</a></li>
+    <li><a href="/rst/index.html">Roman Solar Time</a></li>
+    <li><a href="/rst/faq.html">FAQ</a></li>
+    <li><a href="/rst/breviary-hours.html">Breviary Hours</a></li>
+    <li><a href="/rst/history.html">History</a></li>
     <li><a href="/rst/reclaimingtheday.html">Reclaiming the Day</a></li>
-    <!-- add more entries here -->
   </ul>
 </nav>
