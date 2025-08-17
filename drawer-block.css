@@ -1,0 +1,11 @@
+/* Drawer animation & layering */
+.nav-drawer { position: fixed; inset: 0; z-index:1000; pointer-events:none; visibility:hidden; }
+.nav-drawer[hidden] { display:none; }
+.nav-drawer__backdrop { position:fixed; inset:0; background:#000; opacity:0; transition:opacity .25s ease; pointer-events:none; z-index:1000; }
+.nav-drawer__panel { position:fixed; top:0; right:0; height:100%; width:min(92vw,420px); background:var(--brand-background, #001925); overflow:auto; transform:translateX(100%); transition:transform .25s ease; z-index:1001; will-change:transform; }
+.nav-drawer[aria-hidden="false"]{ pointer-events:auto; visibility:visible; }
+.nav-drawer[aria-hidden="false"] .nav-drawer__backdrop{ opacity:.5; pointer-events:auto; }
+.nav-drawer[aria-hidden="false"] .nav-drawer__panel{ transform:translateX(0); }
+.body-lock { overflow:hidden; }
+@media (prefers-reduced-motion: reduce){ .nav-drawer__backdrop, .nav-drawer__panel{ transition:none; } }
+.hamburger{ position:fixed; top:.6rem; right:.8rem; z-index:1102; }

@@ -1,93 +1,86 @@
-/* Hamburger / Drawer controller
-   - Works with:
-     <button class="hamburger" aria-controls="nav-drawer" aria-expanded="false"></button>
-     <div id="nav-drawer" class="nav-drawer" hidden aria-hidden="true" role="dialog" aria-modal="true">
-       <div class="nav-drawer__backdrop" data-close></div>
-       <aside class="nav-drawer__panel" role="document"> ... </aside>
-     </div>
-*/
-(function () {
+(() => {
   const onReady = (fn) => {
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
     else fn();
   };
 
   onReady(() => {
-    const hamburger = document.querySelector(".hamburger");
-    const drawerId = (hamburger && hamburger.getAttribute("aria-controls")) || "nav-drawer";
-    const drawer = document.getElementById(drawerId);
-    if (!hamburger || !drawer) return;
+    const btn = document.querySelector('.hamburger');
+    const drawer = document.getElementById('nav-drawer');
+    if (!btn || !drawer) return;
 
-    const panel = drawer.querySelector(".nav-drawer__panel");
-    const backdrop = drawer.querySelector(".nav-drawer__backdrop");
+    const panel = drawer.querySelector('.nav-drawer__panel');
+    const closeBtn = drawer.querySelector('.drawer-close');
+    const backdrop = drawer.querySelector('.nav-drawer__backdrop');
+    const FOCUSABLE = 'a[href],button:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),input:not([disabled]),select:not([disabled]),textarea:not([disabled])';
+    let opener = null;
 
-    // Ensure safe closed baseline
+    // Ensure closed baseline
     drawer.hidden = true;
-    drawer.setAttribute("aria-hidden", "true");
-    hamburger.setAttribute("aria-expanded", "false");
+    drawer.setAttribute('aria-hidden','true');
+    btn.setAttribute('aria-expanded','false');
 
-    let lastOpener = null;
+    const trapFocus = (e) => {
+      if (drawer.getAttribute('aria-hidden') === 'true') return;
+      const focusables = Array.from(panel.querySelectorAll(FOCUSABLE)).filter(el => el.offsetParent !== null);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length-1];
+      if (e.key === 'Tab') {
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      } else if (e.key === 'Escape') {
+        e.preventDefault(); closeDrawer();
+      }
+    };
 
-    function openDrawer(opener) {
-      if (!drawer) return;
-      lastOpener = opener || document.activeElement;
-      drawer.hidden = false;                 // participate in layout first
-      // double RAF to guarantee a transition after removing [hidden]
+    function openDrawer() {
+      opener = document.activeElement;
+      drawer.hidden = false; // participate in layout
+
+      // Two rAFs ensure the CSS transition runs
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          drawer.setAttribute("aria-hidden", "false"); // -> CSS transitions run
-          document.body.classList.add("body-lock");
-          hamburger.setAttribute("aria-expanded", "true");
-          // Focus first focusable in panel after transition start
-          const first = panel && panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-          if (first) first.focus({ preventScroll: true });
+          drawer.setAttribute('aria-hidden','false');
+          btn.setAttribute('aria-expanded','true');
+          document.body.classList.add('body-lock');
+          const first = panel.querySelector(FOCUSABLE);
+          if (first) first.focus();
         });
       });
+
+      document.addEventListener('keydown', trapFocus);
     }
 
     function closeDrawer() {
-      if (!drawer) return;
-      drawer.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("body-lock");
-      hamburger.setAttribute("aria-expanded", "false");
-      const onEnd = (e) => {
-        if (e && e.target !== panel) return;
+      drawer.setAttribute('aria-hidden','true');
+      btn.setAttribute('aria-expanded','false');
+      document.body.classList.remove('body-lock');
+
+      const onEnd = (ev) => {
+        if (ev.propertyName !== 'transform') return;
         drawer.hidden = true;
-        panel && panel.removeEventListener("transitionend", onEnd);
-        if (lastOpener && typeof lastOpener.focus === "function") {
-          lastOpener.focus({ preventScroll: true });
-        }
+        panel.removeEventListener('transitionend', onEnd);
+        if (opener && typeof opener.focus === 'function') opener.focus();
       };
-      panel && panel.addEventListener("transitionend", onEnd);
-      // Fallback timeout in case transitionend doesn't fire
-      setTimeout(onEnd, 400);
+      panel.addEventListener('transitionend', onEnd, { once:true });
+
+      // Fallback in case transitionend doesn't fire
+      setTimeout(() => {
+        if (drawer.getAttribute('aria-hidden') === 'true') {
+          drawer.hidden = true;
+        }
+      }, 400);
+
+      document.removeEventListener('keydown', trapFocus);
     }
 
-    // Wire click
-    hamburger.addEventListener("click", (e) => {
-      e.preventDefault();
-      const isOpen = drawer.getAttribute("aria-hidden") === "false";
-      if (isOpen) closeDrawer();
-      else openDrawer(e.currentTarget);
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      expanded ? closeDrawer() : openDrawer();
     });
 
-    // Backdrop & explicit close buttons
-    drawer.addEventListener("click", (e) => {
-      if (e.target && (e.target.hasAttribute("data-close") || e.target.closest(".drawer-close"))) {
-        e.preventDefault();
-        closeDrawer();
-      }
-    });
-
-    // ESC to close
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") {
-        e.preventDefault();
-        closeDrawer();
-      }
-    });
-
-    // Expose for debugging if needed
-    window.__drawer = { openDrawer, closeDrawer, drawer };
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   });
 })();
