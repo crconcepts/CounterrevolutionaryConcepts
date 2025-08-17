@@ -12,11 +12,23 @@
       }
     } catch (_) {}
   </script>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  <link rel="preload" href="/style.css" as="style">
+<link rel="stylesheet" href="/style.css">
+<link rel="prefetch" href="/snippets/rst-submenu.html">
+<link rel="prefetch" href="/snippets/metapolitics-submenu.html">
 </head>
 <body>
+<!-- Main navigation mount -->
+  <div id="mainnav"></div>
+
+  <!-- Navigation scripts -->
+  <script src="/snippets/loadMainnav.js" defer></script>
+  <script src="/snippets/hamburger-nav.js" defer></script>
+  <script src="/snippets/loadSubmenu.js" defer></script>
+  <script src="/snippets/subnav-autotitles.js" defer></script>
+
   <header style="text-align: center;">
     <img src="images/CCLogo.png" alt="Counterrevolutionary Concepts logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 1rem;">
     <h1>Counterrevolutionary Concepts</h1>
