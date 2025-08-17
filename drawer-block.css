@@ -83,3 +83,58 @@
 .nav-drawer .drawer-section > summary {
   padding-left: 1.4rem; /* matches mobile rule */
 }
+
+/* === Standard hamburger icon === */
+.drawer-toggle {
+  inline-size: 44px; /* finger-friendly hit area */
+  block-size: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: .8rem;                /* matches your rounded style */
+  border: 2px solid var(--brand-gold, #c7a23d);
+  background: transparent;
+}
+
+.drawer-toggle:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--brand-gold, #c7a23d), transparent 60%);
+  outline-offset: 3px;
+}
+
+/* 3 bars drawn with pseudo elements */
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+  display: block;
+  inline-size: 22px;
+  block-size: 2px;
+  background: var(--brand-gold, #c7a23d);
+  border-radius: 2px;
+  content: "";
+  position: relative;
+  transition: transform .25s ease, opacity .2s ease, inline-size .2s ease;
+}
+
+/* vertical placement of the three bars */
+.hamburger::before { position: absolute; transform: translateY(-7px); }
+.hamburger::after  { position: absolute; transform: translateY(7px); }
+
+/* Optional hover affordance */
+.drawer-toggle:hover .hamburger,
+.drawer-toggle:hover .hamburger::before,
+.drawer-toggle:hover .hamburger::after {
+  inline-size: 24px;
+}
+
+/* === Open state (to X) – add .is-open to the button when the drawer is visible === */
+.drawer-toggle.is-open .hamburger { opacity: 0; }
+.drawer-toggle.is-open .hamburger::before {
+  transform: rotate(45deg);
+}
+.drawer-toggle.is-open .hamburger::after {
+  transform: rotate(-45deg);
+}
+
+/* Respect dark backgrounds already used by the header */
+@media (prefers-reduced-motion: reduce) {
+  .hamburger, .hamburger::before, .hamburger::after { transition: none; }
+}
