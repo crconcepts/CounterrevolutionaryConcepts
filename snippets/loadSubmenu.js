@@ -3,32 +3,46 @@
   const isEmbedded = new URLSearchParams(location.search).get("embedded") === "true";
   if (isEmbedded) { document.documentElement.classList.add("embedded-mode"); return; }
 
-  const map = [
-    { pathTest: /\/romansolartime\.html|\/resources\//, snippet: "/snippets/project-submenu.html",       containerId: "project-submenu" },
-    { pathTest: /\/metapolitics\//,                      snippet: "/snippets/metapolitics-submenu.html", containerId: "metapolitics-submenu" },
-  ];
+  const SNIPPETS = {
+    rst: "/snippets/rst-submenu.html",
+    metapolitics: "/snippets/metapolitics-submenu.html"
+  };
 
-  const match = map.find(m => m.pathTest.test(location.pathname));
-  if (!match) return;
+  const mounts = Array.from(document.querySelectorAll(".submenu-mount[data-submenu-target]"));
+  if (!mounts.length) return;
 
-  fetch(match.snippet, { cache: "no-store" })
-    .then(res => { if (!res.ok) throw new Error("Failed to fetch submenu"); return res.text(); })
-    .then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const submenu = doc.querySelector(".submenu");
-      if (!submenu) return;
+  const grouped = mounts.reduce((acc, el) => {
+    const key = el.getAttribute("data-submenu-target");
+    if (SNIPPETS[key]) (acc[key] ||= []).push(el);
+    return acc;
+  }, {});
 
-      // Mark active link
-      const currentPath = window.location.pathname.replace(/\/+$/, "");
-      submenu.querySelectorAll("a").forEach(link => {
-        const hrefPath = new URL(link.href, window.location.origin).pathname.replace(/\/+$/, "");
-        if (hrefPath === currentPath) link.classList.add("active");
+  const fetchAndInsert = (key) => {
+    return fetch(SNIPPETS[key], { cache: "no-store" })
+      .then(res => { if (!res.ok) throw new Error(`Failed to fetch ${SNIPPETS[key]}`); return res.text(); })
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const candidate = doc.querySelector(".submenu, .subnav");
+        const submenu = candidate ? candidate.cloneNode(true) : null;
+        if (!submenu) return;
+
+        submenu.classList.add("submenu");
+
+        const currentPath = window.location.pathname.replace(/\/+$/, "");
+        submenu.querySelectorAll("a[href]").forEach(a => {
+          const hrefPath = new URL(a.getAttribute("href"), window.location.origin).pathname.replace(/\/+$/, "");
+          if (hrefPath === currentPath) a.classList.add("active");
+        });
+
+        (grouped[key] || []).forEach(mount => {
+          const clone = submenu.cloneNode(true);
+          mount.innerHTML = "";
+          mount.appendChild(clone);
+        });
       });
+  };
 
-      const container = document.getElementById(match.containerId);
-      if (container) container.appendChild(submenu);
-      else console.warn(`No #${match.containerId} container found in page.`);
-    })
-    .catch(err => console.error("Failed to insert submenu:", err));
+  Promise.all(Object.keys(grouped).map(fetchAndInsert))
+    .catch(err => console.error("Failed to insert submenu(s):", err));
 })();
