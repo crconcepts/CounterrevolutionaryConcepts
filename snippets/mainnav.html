@@ -1,58 +1,25 @@
-<!-- Respect embedded mode (harmless redundancy if already added in <head>) -->
-<script>
-  if (!document.documentElement.classList.contains("embedded-mode")) {
-    const isEmbedded = new URLSearchParams(window.location.search).get("embedded") === "true";
-    if (isEmbedded) document.documentElement.classList.add("embedded-mode");
-  }
-</script>
-
-<!-- Top inline navigation (always visible) -->
-<nav class="topnav" aria-label="Primary">
+<!-- Main navigation snippet: hamburger-only (no horizontal menubar) -->
+<nav class="site-chrome" aria-label="Site">
+  <!-- Hamburger trigger (top-right via CSS) -->
   <button class="hamburger" aria-label="Menu" aria-controls="nav-drawer" aria-expanded="false">
     <span aria-hidden="true"></span>
     <span class="hamburger-text">Menu</span>
   </button>
-
-  <ul class="topnav__list" role="menubar">
-    <li class="topnav__item"><a role="menuitem" href="/">Home</a></li>
-
-    <!-- Roman Solar Time with inline submenu -->
-    <li class="topnav__item topnav__item--has-submenu">
-      <details class="topnav__details" data-section="rst">
-        <summary class="topnav__summary" role="menuitem" aria-haspopup="true" aria-expanded="false">
-          Roman Solar Time
-        </summary>
-        <div class="topnav__submenu-mount submenu-mount" data-submenu-target="rst" aria-label="Roman Solar Time submenu"></div>
-      </details>
-    </li>
-
-    <!-- Metapolitics with inline submenu -->
-    <li class="topnav__item topnav__item--has-submenu">
-      <details class="topnav__details" data-section="metapolitics">
-        <summary class="topnav__summary" role="menuitem" aria-haspopup="true" aria-expanded="false">
-          Metapolitics
-        </summary>
-        <div class="topnav__submenu-mount submenu-mount" data-submenu-target="metapolitics" aria-label="Metapolitics submenu"></div>
-      </details>
-    </li>
-
-    <!-- Resources (kept as single link; adjust if you want a submenu later) -->
-    <li class="topnav__item"><a role="menuitem" href="/resources/faq.html">Resources</a></li>
-    <li class="topnav__item"><a role="menuitem" href="/contact.html">Contact</a></li>
-  </ul>
 </nav>
 
-<!-- Drawer (single instance; reused on all viewports) -->
+<!-- Drawer (used on all viewports) -->
 <div id="nav-drawer" class="nav-drawer" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Site navigation">
   <div class="nav-drawer__backdrop" data-close></div>
   <aside class="nav-drawer__panel" role="document">
     <button class="drawer-close" type="button" aria-label="Close menu">✕ Close</button>
 
-    <details class="drawer-section" data-section="rst">
+    <!-- Roman Solar Time submenu mount -->
+    <details class="drawer-section" data-section="rst" open>
       <summary>Roman Solar Time</summary>
       <div class="drawer__submenu-mount submenu-mount" data-submenu-target="rst" aria-label="Roman Solar Time submenu"></div>
     </details>
 
+    <!-- Resources (static links) -->
     <details class="drawer-section" data-section="resources">
       <summary>Resources</summary>
       <ul class="drawer__links">
@@ -63,14 +30,10 @@
       </ul>
     </details>
 
-    <details class="drawer-section" data-section="metapolitics">
+    <!-- Metapolitics submenu mount -->
+    <details class="drawer-section" data-section="metapolitics" open>
       <summary>Metapolitics</summary>
       <div class="drawer__submenu-mount submenu-mount" data-submenu-target="metapolitics" aria-label="Metapolitics submenu"></div>
     </details>
   </aside>
 </div>
-
-<!-- Scripts to wire up the button & populate sections -->
-<script src="/snippets/hamburger-nav.js"></script>
-<script src="/snippets/loadSubmenu.js" defer></script>
-<script src="/snippets/subnav-autotitles.js" defer></script>
