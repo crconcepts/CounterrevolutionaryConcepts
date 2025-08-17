@@ -27,6 +27,7 @@
 
 /* Submenu block spacing equals main item gap */
 .nav-drawer .drawer-section[open] .submenu { margin: var(--nav-item-gap) 0; }
+  color: #C5A200; /* brand gold for arrow + text */
 
 /* Indent only submenu items (not the summary row) */
 .nav-drawer .submenu ul { margin: 0; padding-left: var(--submenu-indent); }
@@ -60,6 +61,7 @@
   transition: transform .2s ease;
 }
 .nav-drawer .drawer-section[open] > summary::before {
+  color: #C5A200; /* brand gold for arrow + text */
   transform: rotate(90deg);
 }
 
