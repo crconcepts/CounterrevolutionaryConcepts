@@ -13,7 +13,7 @@
 /* ===== Nav drawer spacing + submenu indent ===== */
 :root {
   --nav-item-gap: 0.6rem;
-  --submenu-indent: 1.25rem;
+  --submenu-indent: 2rem;
 }
 .nav-drawer .drawer__links { list-style: disc; margin: 0; padding: 0 0 0 1.1rem; }
 .nav-drawer .drawer__links > li + li { margin-top: var(--nav-item-gap); }
