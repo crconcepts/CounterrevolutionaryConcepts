@@ -1,109 +1,93 @@
-/* Accessible hamburger-driven drawer controller
-   - Ensures drawer starts closed and inert
-   - Smooth slide from right; background dims
-   - Focus trap, ESC to close, backdrop/close button to close
-   - No content changes
+/* Hamburger / Drawer controller
+   - Works with:
+     <button class="hamburger" aria-controls="nav-drawer" aria-expanded="false"></button>
+     <div id="nav-drawer" class="nav-drawer" hidden aria-hidden="true" role="dialog" aria-modal="true">
+       <div class="nav-drawer__backdrop" data-close></div>
+       <aside class="nav-drawer__panel" role="document"> ... </aside>
+     </div>
 */
 (function () {
-  const q = (sel, root = document) => root.querySelector(sel);
-  const qa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-  const drawer = q('#nav-drawer');
-  if (!drawer) return;
+  const onReady = (fn) => {
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn, { once: true });
+    else fn();
+  };
 
-  // Start closed + inert
-  drawer.hidden = true;
-  drawer.setAttribute('aria-hidden', 'true');
+  onReady(() => {
+    const hamburger = document.querySelector(".hamburger");
+    const drawerId = (hamburger && hamburger.getAttribute("aria-controls")) || "nav-drawer";
+    const drawer = document.getElementById(drawerId);
+    if (!hamburger || !drawer) return;
 
-  const panel = q('.nav-drawer__panel', drawer);
-  const backdrop = q('.nav-drawer__backdrop', drawer);
-  const closeBtn = q('.drawer-close', drawer);
-  const openers = qa('[aria-controls="nav-drawer"]');
+    const panel = drawer.querySelector(".nav-drawer__panel");
+    const backdrop = drawer.querySelector(".nav-drawer__backdrop");
 
-  let lastFocus = null;
-  let trapHandler = null;
+    // Ensure safe closed baseline
+    drawer.hidden = true;
+    drawer.setAttribute("aria-hidden", "true");
+    hamburger.setAttribute("aria-expanded", "false");
 
-  function trapFocus(e) {
-    if (e.key !== 'Tab') return;
-    const focusables = qa([
-      'a[href]:not([tabindex="-1"])',
-      'button:not([disabled]):not([tabindex="-1"])',
-      'input:not([disabled]):not([tabindex="-1"])',
-      'select:not([disabled]):not([tabindex="-1"])',
-      'textarea:not([disabled]):not([tabindex="-1"])',
-      '[tabindex]:not([tabindex="-1"])'
-    ].join(','), panel);
-    if (!focusables.length) return;
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
+    let lastOpener = null;
+
+    function openDrawer(opener) {
+      if (!drawer) return;
+      lastOpener = opener || document.activeElement;
+      drawer.hidden = false;                 // participate in layout first
+      // double RAF to guarantee a transition after removing [hidden]
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          drawer.setAttribute("aria-hidden", "false"); // -> CSS transitions run
+          document.body.classList.add("body-lock");
+          hamburger.setAttribute("aria-expanded", "true");
+          // Focus first focusable in panel after transition start
+          const first = panel && panel.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (first) first.focus({ preventScroll: true });
+        });
+      });
     }
-  }
 
-  function onKeydown(e) {
-    if (e.key === 'Escape') {
+    function closeDrawer() {
+      if (!drawer) return;
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("body-lock");
+      hamburger.setAttribute("aria-expanded", "false");
+      const onEnd = (e) => {
+        if (e && e.target !== panel) return;
+        drawer.hidden = true;
+        panel && panel.removeEventListener("transitionend", onEnd);
+        if (lastOpener && typeof lastOpener.focus === "function") {
+          lastOpener.focus({ preventScroll: true });
+        }
+      };
+      panel && panel.addEventListener("transitionend", onEnd);
+      // Fallback timeout in case transitionend doesn't fire
+      setTimeout(onEnd, 400);
+    }
+
+    // Wire click
+    hamburger.addEventListener("click", (e) => {
       e.preventDefault();
-      closeDrawer();
-    }
-  }
-
-  function openDrawer(opener) {
-    if (!drawer || !panel) return;
-    lastFocus = opener || document.activeElement;
-    drawer.hidden = false; // participate in layout
-    requestAnimationFrame(() => {
-      drawer.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('body-lock');
-      (closeBtn || panel).focus({ preventScroll: true });
-      trapHandler = (ev) => trapFocus(ev);
-      document.addEventListener('keydown', trapHandler);
-      document.addEventListener('keydown', onKeydown);
+      const isOpen = drawer.getAttribute("aria-hidden") === "false";
+      if (isOpen) closeDrawer();
+      else openDrawer(e.currentTarget);
     });
-  }
 
-  function closeDrawer() {
-    if (!drawer) return;
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('body-lock');
-    const onEnd = (ev) => {
-      if (ev.target !== panel) return;
-      drawer.hidden = true;
-      panel.removeEventListener('transitionend', onEnd);
-      if (trapHandler) {
-        document.removeEventListener('keydown', trapHandler);
-        trapHandler = null;
-      }
-      document.removeEventListener('keydown', onKeydown);
-      if (lastFocus && typeof lastFocus.focus === 'function') {
-        lastFocus.focus({ preventScroll: true });
-      }
-    };
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      drawer.hidden = true;
-      if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
-      return;
-    }
-    if (panel) panel.addEventListener('transitionend', onEnd, { once: true });
-    else drawer.hidden = true;
-  }
-
-  openers.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      if (expanded) {
+    // Backdrop & explicit close buttons
+    drawer.addEventListener("click", (e) => {
+      if (e.target && (e.target.hasAttribute("data-close") || e.target.closest(".drawer-close"))) {
+        e.preventDefault();
         closeDrawer();
-        btn.setAttribute('aria-expanded', 'false');
-      } else {
-        openDrawer(btn);
-        btn.setAttribute('aria-expanded', 'true');
       }
     });
-  });
 
-  if (backdrop) backdrop.addEventListener('click', closeDrawer);
-  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-  window.addEventListener('hashchange', closeDrawer);
+    // ESC to close
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.getAttribute("aria-hidden") === "false") {
+        e.preventDefault();
+        closeDrawer();
+      }
+    });
+
+    // Expose for debugging if needed
+    window.__drawer = { openDrawer, closeDrawer, drawer };
+  });
 })();
