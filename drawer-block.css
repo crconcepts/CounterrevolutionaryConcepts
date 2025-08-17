@@ -55,8 +55,8 @@
   background-repeat: no-repeat;
   background-size: 1em 1em;
   background-position: center;
-  /* Right-pointing triangle; fill inherits currentColor */
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='currentColor' d='M9 5l7 7-7 7'/></svg>");
+  /* Right-pointing triangle; fill inherits %23C5A200 */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23C5A200' d='M9 5l7 7-7 7'/></svg>");
   transform: rotate(0deg);
   transition: transform .2s ease;
 }
