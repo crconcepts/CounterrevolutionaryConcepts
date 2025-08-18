@@ -1,169 +1,210 @@
-/* Drawer animation & layering */
-.nav-drawer { position: fixed; inset: 0; z-index:1000; pointer-events:none; visibility:hidden; }
-.nav-drawer[hidden] { display:none; }
-.nav-drawer__backdrop { position:fixed; inset:0; background:#000; opacity:0; transition:opacity .25s ease; pointer-events:none; z-index:1000; }
-.nav-drawer__panel { position:fixed; top:0; right:0; height:100%; width:min(92vw,420px); background:var(--brand-background, #001925); overflow:auto; transform:translateX(100%); transition:transform .25s ease; z-index:1001; will-change:transform; }
-.nav-drawer[aria-hidden="false"]{ pointer-events:auto; visibility:visible; }
-.nav-drawer[aria-hidden="false"] .nav-drawer__backdrop{ opacity:.5; pointer-events:auto; }
-.nav-drawer[aria-hidden="false"] .nav-drawer__panel{ transform:translateX(0); }
-.body-lock { overflow:hidden; }
-@media (prefers-reduced-motion: reduce){ .nav-drawer__backdrop, .nav-drawer__panel{ transition:none; } }
-.hamburger{ position:fixed; top:.6rem; right:.8rem; z-index:1102; }
+/* ==========================================================================
+   Drawer / Hamburger UI
+   - Static-site friendly
+   - No content changes; style/structure only
+   ========================================================================== */
 
-/* ===== Nav drawer spacing + submenu indent ===== */
-:root {
-  --nav-item-gap: 0.6rem;
+/* ------------------------------
+   Design tokens (fallbacks only)
+   ------------------------------ */
+:root{
+  --brand-gold: #c7a23d;             /* fallback if not defined elsewhere */
+  --drawer-bg:  rgba(7, 45, 64, 0.98);
+  --drawer-text: #e9d8a6;
+  --nav-item-gap: 1.1rem;
   --submenu-indent: 2rem;
 }
-.nav-drawer .drawer__links { list-style: disc; margin: 0; padding: 0 0 0 1.1rem; }
-.nav-drawer .drawer__links > li + li { margin-top: var(--nav-item-gap); }
-.nav-drawer .drawer-section { margin: 0; padding: 0; }
-.nav-drawer .drawer-section > summary {
-  display: block;
-  margin: var(--nav-item-gap) 0;
-  list-style: none;
-  -webkit-tap-highlight-color: transparent;
-}
 
-/* Submenu block spacing equals main item gap */
-.nav-drawer .drawer-section[open] .submenu { margin: var(--nav-item-gap) 0; }
-  color: #C5A200; /* brand gold for arrow + text */
+/* ------------------------------
+   Toggle button (placement & hit target)
+   ------------------------------ */
 
-/* Indent only submenu items (not the summary row) */
-.nav-drawer .submenu ul { margin: 0; padding-left: var(--submenu-indent); }
-.nav-drawer .submenu li + li { margin-top: calc(var(--nav-item-gap) * 0.75); }
-.nav-drawer .submenu a { display: block; text-decoration: none; }
-
-/* === Consistent custom disclosure arrows (desktop + mobile) === */
-/* Hide UA markers to avoid cross-browser inconsistencies */
-.nav-drawer .drawer-section > summary::-webkit-details-marker { display: none !important; }
-.nav-drawer .drawer-section > summary::marker { content: ""; }
-
-/* Use an inline SVG so iOS Safari reliably shows the icon; rotate on open */
-.nav-drawer .drawer-section > summary {
-  position: relative;
-  padding-left: 1.4rem; /* space for arrow */
-}
-.nav-drawer .drawer-section > summary::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.15em;
-  width: 1em;
-  height: 1em;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-size: 1em 1em;
-  background-position: center;
-  /* Right-pointing triangle; fill inherits %23C5A200 */
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23C5A200' d='M9 5l7 7-7 7'/></svg>");
-  transform: rotate(0deg);
-  transition: transform .2s ease;
-}
-.nav-drawer .drawer-section[open] > summary::before {
-  color: #C5A200; /* brand gold for arrow + text */
-  transform: rotate(90deg);
-}
-
-/* Mobile safeguard: some engines drop list padding; force indent */
-@media (max-width: 768px) {
-  .nav-drawer .submenu ul { padding-left: var(--submenu-indent) !important; }
-  .nav-drawer .drawer-section > summary { padding-left: 1.4rem !important; }
-}
-
-/* === Fix: ensure submenu indentation on desktop too === */
-.nav-drawer .submenu > ul {
-  /* Use logical property so it works in all directions */
-  padding-inline-start: var(--submenu-indent) !important;
-  /* Keep spacing consistent */
-  margin: 0;
-}
-
-/* Mirror the summary left-inset used on mobile so arrow/text align consistently */
-.nav-drawer .drawer-section > summary {
-  padding-left: 1.4rem; /* matches mobile rule */
-}
-
-/* === Standard hamburger icon === */
-.drawer-toggle {
-  inline-size: 44px; /* finger-friendly hit area */
+/* Place the button in the viewport's top-right with safe-area padding */
+.drawer-toggle{
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  right: calc(env(safe-area-inset-right, 0px) + 12px);
+  z-index: 1102;
+  inline-size: 44px;                 /* finger-friendly hit area */
   block-size: 44px;
   display: grid;
   place-items: center;
-  border-radius: .8rem;                /* matches your rounded style */
-  border: 2px solid var(--brand-gold, #c7a23d);
+  border-radius: .8rem;
+  border: 2px solid var(--brand-gold);
   background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
-.drawer-toggle:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--brand-gold, #c7a23d), transparent 60%);
+/* Visible keyboard focus */
+.drawer-toggle:focus-visible{
+  outline: 3px solid color-mix(in srgb, var(--brand-gold), transparent 60%);
   outline-offset: 3px;
 }
 
-/* 3 bars drawn with pseudo elements */
-.hamburger,
-.hamburger::before,
-.hamburger::after {
+/* ------------------------------
+   Hamburger glyph (3 bars → X)
+   ------------------------------ */
+
+.drawer-toggle .hamburger,
+.drawer-toggle .hamburger::before,
+.drawer-toggle .hamburger::after{
   display: block;
   inline-size: 22px;
   block-size: 2px;
-  background: var(--brand-gold, #c7a23d);
+  background: var(--brand-gold);
   border-radius: 2px;
   content: "";
   position: relative;
   transition: transform .25s ease, opacity .2s ease, inline-size .2s ease;
 }
 
-/* vertical placement of the three bars */
-.hamburger::before { position: absolute; transform: translateY(-7px); }
-.hamburger::after  { position: absolute; transform: translateY(7px); }
+/* position top/bottom bars */
+.drawer-toggle .hamburger::before{ position: absolute; transform: translateY(-7px); }
+.drawer-toggle .hamburger::after { position: absolute; transform: translateY(7px); }
 
-/* Optional hover affordance */
+/* small hover affordance */
 .drawer-toggle:hover .hamburger,
 .drawer-toggle:hover .hamburger::before,
-.drawer-toggle:hover .hamburger::after {
-  inline-size: 24px;
+.drawer-toggle:hover .hamburger::after{ inline-size: 24px; }
+
+/* open state: animate to X */
+.drawer-toggle.is-open .hamburger{ opacity: 0; }
+.drawer-toggle.is-open .hamburger::before{ transform: rotate(45deg); }
+.drawer-toggle.is-open .hamburger::after { transform: rotate(-45deg); }
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .drawer-toggle .hamburger,
+  .drawer-toggle .hamburger::before,
+  .drawer-toggle .hamburger::after{ transition: none; }
 }
 
-/* === Open state (to X) – add .is-open to the button when the drawer is visible === */
-.drawer-toggle.is-open .hamburger { opacity: 0; }
-.drawer-toggle.is-open .hamburger::before {
-  transform: rotate(45deg);
-}
-.drawer-toggle.is-open .hamburger::after {
-  transform: rotate(-45deg);
-}
-
-/* Respect dark backgrounds already used by the header */
-@media (prefers-reduced-motion: reduce) {
-  .hamburger, .hamburger::before, .hamburger::after { transition: none; }
+/* --- IMPORTANT: neutralise any legacy fixed-position rules
+       that targeted the glyph itself (root cause of the bug) --- */
+.hamburger{
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
 }
 
-/* === Force the menu toggle to the top-right, regardless of prior rules === */
-:root { --drawer-offset: 12px; }
+/* Ensure header containers don't crop the button */
+header, .site-header, .masthead{ position: relative; overflow: visible; }
 
-/* Try the common IDs/classes and a semantic fallback via [aria-controls="nav-drawer"] */
-button[aria-controls="nav-drawer"],
-#nav-drawer-toggle,
-#menu-toggle,
-#hamburger,
-.drawer-toggle,
-.menu-toggle,
-button.nav-toggle,
-button.hamburger {
-  position: fixed !important; /* escape header layout and flex alignment */
-  top: calc(env(safe-area-inset-top, 0px) + var(--drawer-offset)) !important;
-  right: calc(env(safe-area-inset-right, 0px) + var(--drawer-offset)) !important;
-  left: auto !important;      /* neutralise any left anchoring */
-  margin: 0 !important;
-  z-index: 1000 !important;   /* above logo */
-  transform: none !important; /* cancel any off-screen transforms */
-  clip-path: none !important; /* avoid stray clipping */
-  overflow: visible !important;
+/* ------------------------------
+   Drawer panel & overlay
+   (kept generic; matches existing classes)
+   ------------------------------ */
+
+.nav-drawer{
+  position: fixed;
+  inset: 0 0 0 auto;                 /* full height, right side */
+  inline-size: min(92vw, 420px);
+  background: var(--drawer-bg);
+  color: var(--drawer-text);
+  transform: translateX(100%);
+  transition: transform .28s ease;
+  z-index: 1101;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem 1.25rem 2rem;
+}
+.nav-drawer.is-open{ transform: translateX(0); }
+
+.drawer-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 1100;
+}
+.drawer-overlay.is-visible{
+  opacity: 1;
+  pointer-events: auto;
 }
 
-/* Ensure ancestor containers don't crop it */
-header, .site-header, .masthead {
+/* ------------------------------
+   Nav structure (lists, headings, details/summary)
+   ------------------------------ */
+
+.nav-drawer ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-drawer li + li{ margin-top: var(--nav-item-gap); }
+
+.nav-drawer a{
+  color: var(--drawer-text);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+/* Section accordions (if using <details>) */
+.nav-drawer .drawer-section{
+  margin: var(--nav-item-gap) 0;
+  border: 0;
+}
+.nav-drawer .drawer-section > summary{
+  list-style: none;                   /* hide default marker */
+  cursor: pointer;
+  padding-left: 1.4rem;               /* aligns with mobile design */
   position: relative;
-  overflow: visible !important;
+}
+.nav-drawer .drawer-section > summary::-webkit-details-marker{ display: none; }
+
+/* Custom marker (triangle) */
+.nav-drawer .drawer-section > summary::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .55em;
+  inline-size: 0;
+  block-size: 0;
+  border-inline-start: .5em solid var(--brand-gold);
+  border-block-start: .35em solid transparent;
+  border-block-end: .35em solid transparent;
+  transform: rotate(0deg);
+  transition: transform .2s ease;
+}
+.nav-drawer .drawer-section[open] > summary::before{ transform: rotate(90deg); }
+
+/* Submenu container spacing */
+.nav-drawer .drawer-section[open] .submenu{ margin: var(--nav-item-gap) 0; }
+
+/* ------------------------------
+   Submenu indentation (MOBILE & DESKTOP)
+   ------------------------------ */
+
+.nav-drawer .submenu > ul{
+  padding-inline-start: var(--submenu-indent) !important;
+  margin: 0;
+}
+
+/* Keep same indent on mobile; rule above covers all viewports */
+
+/* ------------------------------
+   Utility
+   ------------------------------ */
+
+/* Close button inside drawer (if used) */
+.nav-drawer .close-btn{
+  display: inline-grid;
+  place-items: center;
+  border-radius: .6rem;
+  border: 2px solid var(--brand-gold);
+  padding: .35rem .7rem;
+  margin-bottom: 1rem;
+  color: var(--drawer-text);
+  background: transparent;
+}
+.nav-drawer .close-btn:focus-visible{
+  outline: 3px solid color-mix(in srgb, var(--brand-gold), transparent 60%);
+  outline-offset: 3px;
 }
