@@ -1,266 +1,28 @@
 /* ==========================================================================
-   Drawer / Hamburger UI
-   - Static-site friendly
-   - No content changes; style/structure only
+   Drawer block overrides (minimal, safe)
    ========================================================================== */
 
-/* ------------------------------
-   Design tokens (fallbacks only)
-   ------------------------------ */
-:root{
-  --brand-gold: #c7a23d;             /* fallback if not defined elsewhere */
-  --drawer-bg:  rgba(7, 45, 64, 0.98);
-  --drawer-text: #e9d8a6;
-  --nav-item-gap: 1.1rem;
-  --submenu-indent: 2rem;
-}
-
-/* ------------------------------
-   Toggle button (placement & hit target)
-   ------------------------------ */
-
-/* Place the button in the viewport's top-right with safe-area padding */
-.drawer-toggle{
+/* Button placement (works with your existing .hamburger icon in style.css) */
+:is(button, a)[aria-controls="nav-drawer"]{
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 12px);
   right: calc(env(safe-area-inset-right, 0px) + 12px);
-  z-index: 1102;
-  inline-size: 44px;                 /* finger-friendly hit area */
+  z-index: 1100;
+  inline-size: 44px;
   block-size: 44px;
   display: grid;
   place-items: center;
-  border-radius: .8rem;
-  border: 2px solid var(--brand-gold);
+  border-radius: 4px;
+  border: 1px solid var(--brand-gold-deep, #c7a23d);
   background: transparent;
   padding: 0;
   margin: 0;
+  touch-action: manipulation;
   cursor: pointer;
 }
 
-/* Visible keyboard focus */
-.drawer-toggle:focus-visible{
-  outline: 3px solid color-mix(in srgb, var(--brand-gold), transparent 60%);
-  outline-offset: 3px;
-}
-
-/* ------------------------------
-   Hamburger glyph (3 bars → X)
-   ------------------------------ */
-
-.drawer-toggle .hamburger,
-.drawer-toggle .hamburger::before,
-.drawer-toggle .hamburger::after{
-  display: block;
-  inline-size: 22px;
-  block-size: 2px;
-  background: var(--brand-gold);
-  border-radius: 2px;
-  content: "";
-  position: relative;
-  transition: transform .25s ease, opacity .2s ease, inline-size .2s ease;
-}
-
-/* position top/bottom bars */
-.drawer-toggle .hamburger::before{ position: absolute; transform: translateY(-7px); }
-.drawer-toggle .hamburger::after { position: absolute; transform: translateY(7px); }
-
-/* small hover affordance */
-.drawer-toggle:hover .hamburger,
-.drawer-toggle:hover .hamburger::before,
-.drawer-toggle:hover .hamburger::after{ inline-size: 24px; }
-
-/* open state: animate to X */
-.drawer-toggle.is-open .hamburger{ opacity: 0; }
-.drawer-toggle.is-open .hamburger::before{ transform: rotate(45deg); }
-.drawer-toggle.is-open .hamburger::after { transform: rotate(-45deg); }
-
-/* reduce motion */
-@media (prefers-reduced-motion: reduce){
-  .drawer-toggle .hamburger,
-  .drawer-toggle .hamburger::before,
-  .drawer-toggle .hamburger::after{ transition: none; }
-}
-
-/* --- IMPORTANT: neutralise any legacy fixed-position rules
-       that targeted the glyph itself (root cause of the bug) --- */
-.hamburger{
-  position: relative !important;
-  top: auto !important;
-  right: auto !important;
-  left: auto !important;
-  bottom: auto !important;
-  transform: none !important;
-}
-
-/* Ensure header containers don't crop the button */
-header, .site-header, .masthead{ position: relative; overflow: visible; }
-
-/* ------------------------------
-   Drawer panel & overlay
-   (kept generic; matches existing classes)
-   ------------------------------ */
-
-.nav-drawer{
-  position: fixed;
-  inset: 0 0 0 auto;                 /* full height, right side */
-  inline-size: min(92vw, 420px);
-  background: var(--drawer-bg);
-  color: var(--drawer-text);
-  transform: translateX(100%);
-  transition: transform .28s ease;
-  z-index: 1101;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 1rem 1.25rem 2rem;
-}
-.nav-drawer.is-open{ transform: translateX(0); }
-
-.drawer-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.35);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-  z-index: 1100;
-}
-.drawer-overlay.is-visible{
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* ------------------------------
-   Nav structure (lists, headings, details/summary)
-   ------------------------------ */
-
-.nav-drawer ul{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.nav-drawer li + li{ margin-top: var(--nav-item-gap); }
-
-.nav-drawer a{
-  color: var(--drawer-text);
-  text-decoration: underline;
-  text-underline-offset: .2em;
-}
-
-/* Section accordions (if using <details>) */
-.nav-drawer .drawer-section{
-  margin: var(--nav-item-gap) 0;
-  border: 0;
-}
-.nav-drawer .drawer-section > summary{
-  list-style: none;                   /* hide default marker */
-  cursor: pointer;
-  padding-left: 1.4rem;               /* aligns with mobile design */
-  position: relative;
-}
-.nav-drawer .drawer-section > summary::-webkit-details-marker{ display: none; }
-
-/* Custom marker (triangle) */
-.nav-drawer .drawer-section > summary::before{
-  content: "";
-  position: absolute;
-  left: 0;
-  top: .55em;
-  inline-size: 0;
-  block-size: 0;
-  border-inline-start: .5em solid var(--brand-gold);
-  border-block-start: .35em solid transparent;
-  border-block-end: .35em solid transparent;
-  transform: rotate(0deg);
-  transition: transform .2s ease;
-}
-.nav-drawer .drawer-section[open] > summary::before{ transform: rotate(90deg); }
-
-/* Submenu container spacing */
-.nav-drawer .drawer-section[open] .submenu{ margin: var(--nav-item-gap) 0; }
-
-/* ------------------------------
-   Submenu indentation (MOBILE & DESKTOP)
-   ------------------------------ */
-
+/* Submenu indentation (apply on all viewports) */
 .nav-drawer .submenu > ul{
-  padding-inline-start: var(--submenu-indent) !important;
+  padding-inline-start: var(--submenu-indent, 2rem) !important;
   margin: 0;
 }
-
-/* Keep same indent on mobile; rule above covers all viewports */
-
-/* ------------------------------
-   Utility
-   ------------------------------ */
-
-/* Close button inside drawer (if used) */
-.nav-drawer .close-btn{
-  display: inline-grid;
-  place-items: center;
-  border-radius: .6rem;
-  border: 2px solid var(--brand-gold);
-  padding: .35rem .7rem;
-  margin-bottom: 1rem;
-  color: var(--drawer-text);
-  background: transparent;
-}
-.nav-drawer .close-btn:focus-visible{
-  outline: 3px solid color-mix(in srgb, var(--brand-gold), transparent 60%);
-  outline-offset: 3px;
-}
-
-/* === UNIVERSAL TOGGLE OVERRIDE (no markup changes required) === */
-:root{
-  --hambar-w: 22px;
-  --hambar-h: 2px;
-  --hambar-gap: 7px;
-}
-
-/* Select any button/link that controls a *drawer* by aria attribute */
-:is(button, a)[aria-controls*="drawer"]{
-  position: fixed !important;
-  top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
-  right: calc(env(safe-area-inset-right, 0px) + 12px) !important;
-  left: auto !important;
-  z-index: 9999 !important;            /* above logos/overlays */
-  inline-size: 44px !important;
-  block-size: 44px !important;
-  display: grid !important;
-  place-items: center !important;
-  border-radius: .8rem !important;
-  border: 2px solid var(--brand-gold, #c7a23d) !important;
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  touch-action: manipulation !important;
-
-  /* draw the MIDDLE bar with a background gradient */
-  background-image: linear-gradient(var(--brand-gold, #c7a23d), var(--brand-gold, #c7a23d));
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: var(--hambar-w) var(--hambar-h);
-}
-
-/* Hide any existing SVG/icon so it can't pull the control left */
-:is(button, a)[aria-controls*="drawer"] > svg,
-:is(button, a)[aria-controls*="drawer"] .icon,
-:is(button, a)[aria-controls*="drawer"] .hamburger { display: none !important; }
-
-/* draw TOP and BOTTOM bars with pseudo-elements */
-:is(button, a)[aria-controls*="drawer"]::before,
-:is(button, a)[aria-controls*="drawer"]::after{
-  content: "";
-  position: absolute;
-  inline-size: var(--hambar-w);
-  block-size: var(--hambar-h);
-  background: var(--brand-gold, #c7a23d);
-  border-radius: 2px;
-}
-:is(button, a)[aria-controls*="drawer"]::before{ transform: translateY(calc(-1 * var(--hambar-gap))); }
-:is(button, a)[aria-controls*="drawer"]::after { transform: translateY(var(--hambar-gap)); }
-
-/* Make sure nothing transparent is covering the button */
-.drawer-overlay{ z-index: 9000; } /* still below the button */
-header, .site-header, .masthead{ position: relative; overflow: visible; }
