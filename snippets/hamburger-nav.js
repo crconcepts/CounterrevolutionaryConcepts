@@ -1,5 +1,3 @@
-<!-- File: snippets/hamburger-nav.js -->
-<script>
 // Drawer controller with delegated binding and ARIA state
 (() => {
   const qs  = (s, r=document) => r.querySelector(s);
@@ -89,4 +87,3 @@
 
   (document.readyState === 'loading') ? document.addEventListener('DOMContentLoaded', init) : init();
 })();
-</script>
