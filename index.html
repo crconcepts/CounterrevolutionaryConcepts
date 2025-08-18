@@ -2,20 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Counterrevolutionary Concepts</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="drawer-block.css">
-  <!-- Load navigation once -->
-  <script src="snippets/loadMainnav.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no">
+  <script>
+    try {
+      if (new URLSearchParams(location.search).get('embedded') === 'true') {
+        document.documentElement.classList.add('embedded-mode');
+      }
+    } catch (_) {}
+  </script>
+<link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+  <link rel="preload" href="/style.css" as="style">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/drawer-block.css">
+<link rel="prefetch" href="/snippets/rst-submenu.html">
+<link rel="prefetch" href="/snippets/metapolitics-submenu.html">
 </head>
 <body>
-  <!-- Single mainnav mount point -->
+<!-- Main navigation mount -->
   <div id="mainnav"></div>
 
-  <main>
-    <!-- Page content here -->
-  </main>
+  <!-- Navigation scripts -->
+  <script src="/snippets/loadMainnav.js" defer></script>
+  <script src="/snippets/hamburger-nav.js" defer></script>
+  <script src="/snippets/loadSubmenu.js" defer></script>
+  <script src="/snippets/subnav-autotitles.js" defer></script>
 
+  <header style="text-align: center;">
+    <img src="images/CCLogo.png" alt="Counterrevolutionary Concepts logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 1rem;">
+    <h1>Counterrevolutionary Concepts</h1>
+    <p><em>Renovatio ex Traditione</em></p>
+    <img src="images/Chronos.png" alt="Father Chronos" style="max-width: 200px; height: auto; display: block; margin: 0 auto 1.5rem;">
+  </header>
+<main>
+  
+
+  <section>
+    <h2>About</h2>
+    <p>
+      Counterrevolutionary Concepts is an independent creative development studio based in Australia, dedicated to cultural renewal through traditional principles. We create digital tools, written content, and educational resources that reconnect individuals and communities with natural rhythm, historical insight, and spiritual structure.
+    </p>
+    <p>
+      This website is owned and operated by Counterrevolutionary Concepts. All operations are managed under 
+      <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> and 
+      <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Current Project</h2>
+    <p>
+      Our flagship product, <a href="/rst/index.html"><strong>Roman Solar Time</strong></a>, is an iOS application that revives the ancient method of solar-based timekeeping. It is expected to release in <strong>November 2025</strong>, sunlight permitting.
+    </p>
+    <p>
+      <strong>Roman Solar Time</strong> bridges the divide between the mechanical precision that early clockmakers sought to provide and the traditional, solar-based timekeeping practiced since antiquity.
+    </p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>For general inquiries please complete our <a href="contact.html">contact form</a>.</p>
+    <p>You can view our <a href="privacy.html">privacy policy</a> here.</p>
+  </section>
+</main>
+
+  <footer>
+    © 2025 Counterrevolutionary Concepts. All rights reserved.<br>
+    <span class="no-tel">ABN&nbsp;94&nbsp;010&nbsp;172&nbsp;081</span> &nbsp;|&nbsp; 
+    <span class="no-tel">D‑U‑N‑S®&nbsp;892850454</span> &nbsp;|&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </footer>
 </body>
 </html>
