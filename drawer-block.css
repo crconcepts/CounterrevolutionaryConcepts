@@ -139,25 +139,31 @@
   .hamburger, .hamburger::before, .hamburger::after { transition: none; }
 }
 
-/* === Place the hamburger at top-right, away from edges === */
-.drawer-toggle {
-  position: fixed;                 /* ignore parent layout; stick to viewport */
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  right: calc(env(safe-area-inset-right, 0px) + 12px);
-  z-index: 1000;                   /* above header/logo */
-  margin: 0;                       /* avoid accidental negative offsets */
-  /* keep the visual style from earlier */
-  inline-size: 44px;
-  block-size: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: .8rem;
-  border: 2px solid var(--brand-gold, #c7a23d);
-  background: transparent;
+/* === Force the menu toggle to the top-right, regardless of prior rules === */
+:root { --drawer-offset: 12px; }
+
+/* Try the common IDs/classes and a semantic fallback via [aria-controls="nav-drawer"] */
+button[aria-controls="nav-drawer"],
+#nav-drawer-toggle,
+#menu-toggle,
+#hamburger,
+.drawer-toggle,
+.menu-toggle,
+button.nav-toggle,
+button.hamburger {
+  position: fixed !important; /* escape header layout and flex alignment */
+  top: calc(env(safe-area-inset-top, 0px) + var(--drawer-offset)) !important;
+  right: calc(env(safe-area-inset-right, 0px) + var(--drawer-offset)) !important;
+  left: auto !important;      /* neutralise any left anchoring */
+  margin: 0 !important;
+  z-index: 1000 !important;   /* above logo */
+  transform: none !important; /* cancel any off-screen transforms */
+  clip-path: none !important; /* avoid stray clipping */
+  overflow: visible !important;
 }
 
-/* Ensure no parent clips it on narrow viewports */
+/* Ensure ancestor containers don't crop it */
 header, .site-header, .masthead {
-  position: relative;              /* harmless if already set */
-  overflow: visible;               /* avoid cropping from containers */
+  position: relative;
+  overflow: visible !important;
 }
