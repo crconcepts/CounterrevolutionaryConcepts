@@ -208,3 +208,59 @@ header, .site-header, .masthead{ position: relative; overflow: visible; }
   outline: 3px solid color-mix(in srgb, var(--brand-gold), transparent 60%);
   outline-offset: 3px;
 }
+
+/* === UNIVERSAL TOGGLE OVERRIDE (no markup changes required) === */
+:root{
+  --hambar-w: 22px;
+  --hambar-h: 2px;
+  --hambar-gap: 7px;
+}
+
+/* Select any button/link that controls a *drawer* by aria attribute */
+:is(button, a)[aria-controls*="drawer"]{
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+  right: calc(env(safe-area-inset-right, 0px) + 12px) !important;
+  left: auto !important;
+  z-index: 9999 !important;            /* above logos/overlays */
+  inline-size: 44px !important;
+  block-size: 44px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: .8rem !important;
+  border: 2px solid var(--brand-gold, #c7a23d) !important;
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+
+  /* draw the MIDDLE bar with a background gradient */
+  background-image: linear-gradient(var(--brand-gold, #c7a23d), var(--brand-gold, #c7a23d));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: var(--hambar-w) var(--hambar-h);
+}
+
+/* Hide any existing SVG/icon so it can't pull the control left */
+:is(button, a)[aria-controls*="drawer"] > svg,
+:is(button, a)[aria-controls*="drawer"] .icon,
+:is(button, a)[aria-controls*="drawer"] .hamburger { display: none !important; }
+
+/* draw TOP and BOTTOM bars with pseudo-elements */
+:is(button, a)[aria-controls*="drawer"]::before,
+:is(button, a)[aria-controls*="drawer"]::after{
+  content: "";
+  position: absolute;
+  inline-size: var(--hambar-w);
+  block-size: var(--hambar-h);
+  background: var(--brand-gold, #c7a23d);
+  border-radius: 2px;
+}
+:is(button, a)[aria-controls*="drawer"]::before{ transform: translateY(calc(-1 * var(--hambar-gap))); }
+:is(button, a)[aria-controls*="drawer"]::after { transform: translateY(var(--hambar-gap)); }
+
+/* Make sure nothing transparent is covering the button */
+.drawer-overlay{ z-index: 9000; } /* still below the button */
+header, .site-header, .masthead{ position: relative; overflow: visible; }
