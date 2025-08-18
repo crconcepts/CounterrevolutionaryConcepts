@@ -606,3 +606,28 @@ body{
 @media (prefers-reduced-motion: reduce){
   .nav-drawer__backdrop, .nav-drawer__panel{ transition: none; }
 }
+
+/* Ensure content has breathing room on all devices */
+.main-content, 
+.page-content {
+  padding-left: 1rem;   /* ~16px, safe on mobile */
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 75ch;      /* keeps readable line length */
+}
+
+/* Add top margin so text doesn't overlap hamburger */
+.main-content h1:first-of-type,
+.page-content h1:first-of-type {
+  margin-top: 4rem;  /* adjust if your hamburger is taller */
+}
+
+/* For larger screens, add a bit more horizontal padding */
+@media (min-width: 768px) {
+  .main-content, 
+  .page-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
